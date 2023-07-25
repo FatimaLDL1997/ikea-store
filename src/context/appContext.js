@@ -13,6 +13,17 @@ const AppContext = React.createContext();
 
 const AppProvider = ({ children }) => {
   const [state, dispatch] = useReducer(reducer, initialState);
+  const [show, setShow] = useState(false);
+  const [clicked, setClicked] = useState(false);
+  const [index, setIndex] = useState(0);
+
+  // const title = document.querySelector('.window-title')
+  // title.innerHTML = link.text
+  // console.log(title.innerHTML)
+
+  const [title, setTitle] = useState(
+    document.querySelector(".window-title").innerHTML
+  );
 
   const toggleSidebar = () => {
     dispatch({ type: TOGGLE_SIDEBAR });
@@ -23,6 +34,14 @@ const AppProvider = ({ children }) => {
       value={{
         ...state,
         toggleSidebar,
+        show,
+        setShow,
+        clicked,
+        setClicked,
+        title,
+        setTitle,
+        index,
+        setIndex,
       }}
     >
       {children}

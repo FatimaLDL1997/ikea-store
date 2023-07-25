@@ -4,20 +4,26 @@ import { NavLink } from "react-router-dom";
 import Wrapper from "../assets/wrappers/Navlinks";
 
 import { BiArrowBack } from "react-icons/bi";
+import { useAppContext } from "../context/appContext";
 
 const NavLinks = ({ toggleSidebar }) => {
+  const { show, setShow, clicked, setClicked, title, setTitle, index,setIndex } =
+    useAppContext();
+
   let newLinks1 = links.slice(0, 6);
   let newLinks2 = links.slice(6, 11);
   let newLinks3 = links.slice(11, 19);
 
-  const [clicked, setClicked] = useState(false);
-  const [show, setShow] = useState(false);
-  const [index, setIndex] = useState(0);
 
   function myclickfun(link) {
     console.log(link.submenu.length); //checking for submenu
-    console.log(link.id1)
-    if (link.submenu.length<1) {
+    console.log(link.id1);
+    const t = document.querySelector(".window-title");
+    t.innerHTML = link.text;
+    setTitle(title)
+    console.log(t.innerHTML);
+
+    if (link.submenu.length < 1) {
       // if there isn't
       setClicked(false);
       toggleSidebar();
@@ -42,17 +48,18 @@ const NavLinks = ({ toggleSidebar }) => {
               }}
             />
           </div>
-          
-          <div id="sj" className="submenu-content">
 
+          <div id="sj" className="submenu-content">
             {/*render title */}
             {newLinks1.map((link) => {
               const { submenu, id1, text } = link;
 
               return (
-                id1 == index && <div key={id1} className="submenu-title">
-                  {text }
-                </div> 
+                id1 == index && (
+                  <div key={id1} className="submenu-title">
+                    {text}
+                  </div>
+                )
               );
             })}
 
@@ -63,17 +70,19 @@ const NavLinks = ({ toggleSidebar }) => {
 
               return submenu.map((sublink) => {
                 const { title, id, path } = sublink;
-               if(id1 == index){return (
-                  <NavLink
-                    to={path}
-                    key={id}
-                    className={({ isActive }) =>
-                      isActive ? "nav-link active" : "nav-link"
-                    }
-                  >
-                    { title }
-                  </NavLink>
-                );}
+                if (id1 == index) {
+                  return (
+                    <NavLink
+                      to={path}
+                      key={id}
+                      className={({ isActive }) =>
+                        isActive ? "nav-link active" : "nav-link"
+                      }
+                    >
+                      {title}
+                    </NavLink>
+                  );
+                }
               });
             })}
           </div>

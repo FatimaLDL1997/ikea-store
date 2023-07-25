@@ -19,11 +19,36 @@ import { MdOutlineLocalOffer } from "react-icons/md";
 import links from "../utils/links";
 import { NavLink } from "react-router-dom";
 
+
+
 const Navbar = () => {
   let newLinks1 = links.slice(0, 6);
 
-  const { toggleSidebar, logoutUser, user } = useAppContext();
+  const { toggleSidebar, logoutUser, user, show, setShow, clicked, setClicked, index, setIndex} = useAppContext();
   const [showLogout, setShowLogout] = useState(false);
+
+  // const [clicked, setClicked] = useState(false);
+  // const [show, setShow] = useState(false);
+
+
+  function myclickfun(link) {
+    console.log(link.submenu.length); //checking for submenu
+    // console.log(link.id1)
+    if (link.submenu.length>1) {
+      // if there isn't
+      setShow(true);
+      setClicked(true);
+      setIndex(link.id1);   
+      console.log(link.id1);
+      // setClicked(false);
+      toggleSidebar();
+    } else {
+      setShow(false);
+      setClicked(false);
+      // if there is one
+      // console.log(link.id1);
+    }
+  }
 
   return (
     <Wrapper>
@@ -84,39 +109,31 @@ const Navbar = () => {
             <HiOutlineShoppingBag />
           </span>
 
-          {/* <div className="btn-container">
-          <button className="btn" onClick={() => setShowLogout(!showLogout)}>
-            <FaUserCircle />
-            {user?.name}
-            <FaCaretDown />
-          </button>
-          <div className={showLogout ? "dropdown show-dropdown" : "dropdown"}>
-            <button onClick={logoutUser} className="dropdown-btn">
-              logout
-            </button>
-          </div>
-        </div> */}
         </div>
         <div className="lower-nav-container">
-          <div className="short-nav">
-            {newLinks1.map((link) => {
-              const { text, path, id } = link;
+         
+            <div className="short-nav">
+              {newLinks1.map((link) => {
+                const { text, path, id1 } = link;
 
-              return (
-                <NavLink
-                  to={path}
-                  key={id}
-                  onClick={toggleSidebar}
-                  className={({ isActive }) =>
-                    isActive ? "nav-link active" : "nav-link"
-                  }
-                >
-                  {/* <span className='icon'>{icon}</span> */}
-                  {text}
-                </NavLink>
-              );
-            })}
-          </div>
+                return (
+                  <NavLink
+                    to={path}
+                    key={id1}
+                    onClick={()=>{
+                      myclickfun(link)
+                    }}
+                    className={({ isActive }) =>
+                      isActive ? "nav-link active" : "nav-link"
+                    }
+                  >
+                    {/* <span className='icon'>{icon}</span> */}
+                    {text}
+                  </NavLink>
+                );
+              })}
+            </div>
+          
           <div className="loc-store">
             <div className="delivery">
               <FiTruck />
@@ -128,9 +145,7 @@ const Navbar = () => {
             </div>
           </div>
         </div>
-        <div className="line">
-        
-        </div>
+        <div className="line"></div>
       </main>
     </Wrapper>
   );

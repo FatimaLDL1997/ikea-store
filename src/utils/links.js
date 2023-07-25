@@ -50,7 +50,7 @@ const links = [
   {
     id1: 4,
     text: "Essentials under $10",
-    path: "essentials",
+    path: "under10",
     submenu: [
      
     ],
