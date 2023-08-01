@@ -7,20 +7,28 @@ import { BiArrowBack } from "react-icons/bi";
 import { useAppContext } from "../context/appContext";
 
 const NavLinks = ({ toggleSidebar }) => {
-  const { show, setShow, clicked, setClicked, title, setTitle, index,setIndex } =
-    useAppContext();
+  const {
+    show,
+    setShow,
+    clicked,
+    setClicked,
+    title,
+    setTitle,
+    index,
+    setIndex,
+    windowWidth
+  } = useAppContext();
 
   let newLinks1 = links.slice(0, 6);
   let newLinks2 = links.slice(6, 11);
   let newLinks3 = links.slice(11, 19);
-
 
   function myclickfun(link) {
     console.log(link.submenu.length); //checking for submenu
     console.log(link.id1);
     const t = document.querySelector(".window-title");
     t.innerHTML = link.text;
-    setTitle(title)
+    setTitle(title);
     console.log(t.innerHTML);
 
     if (link.submenu.length < 1) {
@@ -39,7 +47,7 @@ const NavLinks = ({ toggleSidebar }) => {
   return (
     <Wrapper>
       {show ? (
-        <div className="submenu-content-container">
+        <div className="submenu-content-container" >
           <div className="back-icon">
             <BiArrowBack
               onClick={() => {
@@ -56,7 +64,15 @@ const NavLinks = ({ toggleSidebar }) => {
 
               return (
                 id1 == index && (
-                  <div key={id1} className="submenu-title">
+                  <div
+                    key={id1}
+                    className="submenu-title"
+                    onClick={() => {
+                      toggleSidebar();
+                      // setClicked(false);
+                      // setShow(false);
+                    }}
+                  >
                     {text}
                   </div>
                 )
@@ -78,6 +94,9 @@ const NavLinks = ({ toggleSidebar }) => {
                       className={({ isActive }) =>
                         isActive ? "nav-link active" : "nav-link"
                       }
+                      onClick={() => {
+                        toggleSidebar();
+                      }}
                     >
                       {title}
                     </NavLink>

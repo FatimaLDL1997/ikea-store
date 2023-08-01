@@ -1,8 +1,8 @@
 import styled from "styled-components";
 
 const Wrapper = styled.aside`
-  display: none;
-  @media (min-width: 992px) {
+  /* display: none; */
+  /* @media (min-width: 992px) { */
     display: block;
     box-shadow: 1px 0px 0px 0px rgba(0, 0, 0, 0.1);
     .sidebar-container {
@@ -58,6 +58,7 @@ const Wrapper = styled.aside`
       height: 4rem;
       background: white;
       width: 451px;
+      top: 0;
     }
     header svg {
       cursor: pointer;
@@ -68,78 +69,7 @@ const Wrapper = styled.aside`
       /* background-color: lightgray; */
       border-radius: 50%;
     }
-    .nav-links-bolder {
-      padding-top: 2rem;
-      display: flex;
-      flex-direction: column;
-      padding-left: 6.8rem;
-      padding-right: 4rem;
-      font-weight: bolder;
-      font-size: 2.3rem;
-      color: black;
-    }
-    .nav-links-bold {
-      /* padding-top: 2rem; */
-      display: flex;
-      flex-direction: column;
-      padding-left: 6.8rem;
-      padding-right: 4rem;
-      font-weight: 600;
-      font-size: 0.9rem;
-      color: black;
-    }
-    .nav-links-reg {
-      padding-top: 1.5rem;
-      display: flex;
-      flex-direction: column;
-      padding-left: 6.8rem;
-      padding-right: 4rem;
-      font-weight: 200;
-      font-size: 0.9rem;
-      color: black;
-    }
-    .nav-link {
-      display: flex;
-      align-items: center;
-      color: black;
-      padding: 1rem 0;
-      padding-left: 2.5rem;
-      text-transform: capitalize;
-      transition: var(--transition);
-    }
-    .nav-link:hover {
-      /* background: var(--grey-50); */
-      /* padding-left: 3rem; */
-      color: var(--grey-900);
-      text-decoration-line: underline;
-    }
-    .nav-link:hover .icon {
-      color: var(--primary-500);
-    }
-    .icon {
-      font-size: 1.5rem;
-      margin-right: 1rem;
-      display: grid;
-      place-items: center;
-      transition: var(--transition);
-    }
-    .active {
-      color: var(--grey-900);
-    }
-    .active .icon {
-      color: var(--primary-500);
-    }
-
-    /*overlay*/
-    .overlay {
-      background-color: rgba(128, 128, 128, 0.559);
-      top: 0px;
-      left: 0px;
-      width: 100vw;
-      height: 100vh;
-      position: absolute;
-      z-index: 10;
-    }
+   
     .container {
       padding-top: 3rem;
       width: 100%;
@@ -178,6 +108,6 @@ const Wrapper = styled.aside`
       border: none;
       /* border-radius: 30px; */
     }
-  }
+  /* } */
 `;
 export default Wrapper;

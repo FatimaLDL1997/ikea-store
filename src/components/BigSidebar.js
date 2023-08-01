@@ -6,7 +6,16 @@ import { GrFormClose } from "react-icons/gr";
 import { AiOutlineUser } from "react-icons/ai";
 
 const BigSidebar = () => {
-  const { showSidebar, toggleSidebar, user } = useAppContext();
+  const {
+    showSidebar,
+    toggleSidebar,
+    user,
+    windowHeight,
+    windowWidth,
+    setWindowHeight,
+    setWindowWidth,
+    setWindowDimensions,
+  } = useAppContext();
   console.log(showSidebar);
   return (
     <Wrapper>
@@ -24,12 +33,14 @@ const BigSidebar = () => {
           </header>
 
           <div className="container">
-            <button className="login-btn">
-              <AiOutlineUser />
-              <div className="text">
-                {user ? `Hej ${user}!` : "Hej! Login or signcup"}
-              </div>
-            </button>
+            {windowWidth <1425 && (
+              <button className="login-btn"  > 
+                <AiOutlineUser />
+                <div className="text">
+                  {user ? `Hej ${user}!` : "Hej! Login or signcup"}
+                </div>
+              </button>
+            )}
 
             <NavLinks toggleSidebar={toggleSidebar} />
           </div>

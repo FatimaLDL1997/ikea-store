@@ -10,10 +10,11 @@ const Wrapper = styled.aside`
   .submenu-content-container {
     margin-left: 43px;
     display: flex;
-    flex-direction: column;
+    flex-direction: row;
+    padding-top: 3rem;
   }
   .submenu-content {
-    margin-left: 63px;
+    margin-left: 2rem ;
     display: flex;
     flex-direction: column;
   }

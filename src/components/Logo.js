@@ -1,6 +1,8 @@
 import logo from "../assets/images/logo.svg";
+import {  useNavigate } from "react-router-dom";
 
 const Logo = () => {
-  return <img src={logo} alt='ikea' className='logo' />;
+  const navigate = useNavigate()
+  return <img src={logo} alt='ikea' onClick={()=>navigate('/main')} className='logo' />;
 };
 export default Logo;

@@ -1,7 +1,7 @@
 import Wrapper from "../assets/wrappers/Navbar";
 import { FaHome } from "react-icons/fa";
 import { FiMenu, FiTruck } from "react-icons/fi";
-import { useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import { FaAlignLeft, FaUserCircle, FaCaretDown } from "react-icons/fa";
 import { useAppContext } from "../context/appContext";
 import Logo from "./Logo";
@@ -19,26 +19,35 @@ import { MdOutlineLocalOffer } from "react-icons/md";
 import links from "../utils/links";
 import { NavLink } from "react-router-dom";
 
-
-
 const Navbar = () => {
   let newLinks1 = links.slice(0, 6);
 
-  const { toggleSidebar, logoutUser, user, show, setShow, clicked, setClicked, index, setIndex} = useAppContext();
+  const {
+    toggleSidebar,
+    logoutUser,
+    user,
+    show,
+    setShow,
+    clicked,
+    setClicked,
+    index,
+    setIndex,
+    windowHeight,
+    windowWidth,
+    setWindowHeight,
+    setWindowWidth,
+    setWindowDimensions,
+  } = useAppContext();
   const [showLogout, setShowLogout] = useState(false);
-
-  // const [clicked, setClicked] = useState(false);
-  // const [show, setShow] = useState(false);
-
 
   function myclickfun(link) {
     console.log(link.submenu.length); //checking for submenu
     // console.log(link.id1)
-    if (link.submenu.length>1) {
+    if (link.submenu.length > 1) {
       // if there isn't
       setShow(true);
       setClicked(true);
-      setIndex(link.id1);   
+      setIndex(link.id1);
       console.log(link.id1);
       // setClicked(false);
       toggleSidebar();
@@ -54,7 +63,7 @@ const Navbar = () => {
     <Wrapper>
       <main className="main-container">
         <div className="top-massege">
-          <li>
+          {/* <li>
             <BsTelephone className="top-massege-icon" />
             Order by phone
           </li>
@@ -65,53 +74,93 @@ const Navbar = () => {
           <li>
             <MdOutlineLocalOffer className="top-massege-icon" />
             Join IKEA Family
-          </li>
+          </li> */}
+          Download the IKEA app
         </div>
         <div className="nav-center">
-          <div className="menu-container">
-            <div className="toggle-btn-container">
-              <button className="toggle-btn" onClick={toggleSidebar}>
-                <FiMenu />
-              </button>
+          {windowWidth > 1700 && (
+            <div className="menu-container">
+              <div className="toggle-btn-container">
+                <button className="toggle-btn" onClick={toggleSidebar}>
+                  <FiMenu />
+                </button>
+              </div>
+              Menu
             </div>
-            Menu
-          </div>
+          )}
 
           <div className="navbar-logo">
             <Logo className="logo" />
           </div>
 
-          <div className="search-container">
-            <span className="search-icon">
-              <AiOutlineSearch />
-            </span>
-            <input
-              type="text"
-              name="search"
-              className="form-input"
-              placeholder="Find what you need to Bring Home to Life"
-            ></input>
-          </div>
-          <span className="camera-icon">
-            <AiOutlineCamera />
-          </span>
-
-          <button className="login-btn">
-            <AiOutlineUser />
-            <div className="text">
-              {user ? `Hej ${user}!` : "Hej! Login or signcup"}
+          {windowWidth > 700 && (
+            <div className="search-container">
+              <span className="search-icon">
+                <AiOutlineSearch />
+              </span>
+              <input
+                type="text"
+                name="search"
+                className="form-input"
+                placeholder="Find what you need to Bring Home to Life"
+               
+              ></input>
+              <span className="camera-icon">
+                <AiOutlineCamera />
+              </span>
             </div>
-          </button>
-          <span className="fav-list">
-            <AiOutlineHeart />
-          </span>
-          <span className="cart">
-            <HiOutlineShoppingBag />
-          </span>
+          )}
 
+          <div className="btns-container">
+            <button
+              className="login-btn"
+              style={{ width: windowWidth < 1700 ? "max-content": '11rem' }}
+            >
+              <AiOutlineUser />
+              {windowWidth > 1700 && (
+                <div className="text">
+                  {user ? `Hej ${user}!` : "Hej! Login or signcup"}
+                </div>
+              )}
+            </button>
+            <span className="fav-list">
+              <AiOutlineHeart />
+            </span>
+            <span className="cart">
+              <HiOutlineShoppingBag />
+            </span>
+            {windowWidth < 1700 && (
+              <div
+                className="toggle-btn-container"
+                style={{ paddingTop: "0", paddingLeft: "0" }}
+              >
+                <button className="toggle-btn" onClick={toggleSidebar}>
+                  <FiMenu />
+                </button>
+              </div>
+            )}
+          </div>
         </div>
-        <div className="lower-nav-container">
-         
+        {windowWidth < 700 && (
+            <div className="search-container" >
+              <span className="search-icon">
+                <AiOutlineSearch />
+              </span>
+              <input
+                type="text"
+                name="search"
+                className="form-input"
+                placeholder="Find what you need to Bring Home to Life"
+                style={{ width: "88vw" }}
+              ></input>
+              <span className="camera-icon">
+                <AiOutlineCamera />
+              </span>
+            </div>
+          )}
+
+        {windowWidth > 1700 && (
+          <div className="lower-nav-container">
             <div className="short-nav">
               {newLinks1.map((link) => {
                 const { text, path, id1 } = link;
@@ -120,8 +169,8 @@ const Navbar = () => {
                   <NavLink
                     to={path}
                     key={id1}
-                    onClick={()=>{
-                      myclickfun(link)
+                    onClick={() => {
+                      myclickfun(link);
                     }}
                     className={({ isActive }) =>
                       isActive ? "nav-link active" : "nav-link"
@@ -133,8 +182,21 @@ const Navbar = () => {
                 );
               })}
             </div>
-          
-          <div className="loc-store">
+
+            <div className="loc-store">
+              <div className="delivery">
+                <FiTruck />
+                <h1>M4X 1K3</h1>
+              </div>
+              <div className="mystore">
+                <TbBuildingStore />
+                <h1>Toronto Downtown - Aura</h1>
+              </div>
+            </div>
+          </div>
+        )}
+        {windowWidth < 1700 && (
+          <div className="loc-store-small">
             <div className="delivery">
               <FiTruck />
               <h1>M4X 1K3</h1>
@@ -144,8 +206,12 @@ const Navbar = () => {
               <h1>Toronto Downtown - Aura</h1>
             </div>
           </div>
-        </div>
-        <div className="line"></div>
+        )}
+{
+  windowWidth>1700 &&
+  <div className="line"></div>
+
+}
       </main>
     </Wrapper>
   );

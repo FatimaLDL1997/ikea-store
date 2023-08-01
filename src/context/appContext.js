@@ -1,4 +1,4 @@
-import React, { useReducer, useContext, useState } from "react";
+import React, { useReducer,useEffect, useContext, useState } from "react";
 
 import { TOGGLE_SIDEBAR } from "./actions";
 
@@ -17,6 +17,23 @@ const AppProvider = ({ children }) => {
   const [clicked, setClicked] = useState(false);
   const [index, setIndex] = useState(0);
 
+    
+  const [windowWidth, setWindowWidth] = useState(window.innerWidth);
+  const [windowHeight, setWindowHeight] = useState(window.innerHeight);
+
+  const setWindowDimensions = () => {
+    setWindowWidth(window.innerWidth);
+    setWindowHeight(window.innerHeight);
+  };
+  useEffect(() => {
+    window.addEventListener("resize", setWindowDimensions);
+
+    console.log(windowWidth);
+
+    return () => {
+      window.removeEventListener("resize", setWindowDimensions);
+    };
+  }, [window.innerWidth]);
   // const title = document.querySelector('.window-title')
   // title.innerHTML = link.text
   // console.log(title.innerHTML)
@@ -42,6 +59,12 @@ const AppProvider = ({ children }) => {
         setTitle,
         index,
         setIndex,
+
+        windowHeight,
+        windowWidth,
+        setWindowHeight,
+        setWindowWidth,
+        setWindowDimensions,
       }}
     >
       {children}
