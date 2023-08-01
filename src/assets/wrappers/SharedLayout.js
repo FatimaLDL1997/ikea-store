@@ -20,7 +20,7 @@ const Wrapper = styled.section`
     display: flex;
     flex-direction: column;
     align-content: flex-start;
-    align-items: center;
+    /* align-items: center; */
 
   }
 }

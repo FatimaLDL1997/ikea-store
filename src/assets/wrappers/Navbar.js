@@ -93,8 +93,6 @@ const Wrapper = styled.nav`
     flex-wrap: nowrap;
     align-items: center;
     justify-content: center;
-    /* margin: 0 auto; */
-    /* margin-right: 0.7rem; */
   }
   .fav-list:hover {
     background-color: lightgrey;

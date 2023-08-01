@@ -1,2 +1,3 @@
 import NewProducts from "./NewProducts"
-export {NewProducts}
+import NewProduct from "./NewProduct"
+export {NewProducts, NewProduct}
