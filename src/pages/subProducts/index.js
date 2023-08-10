@@ -1,3 +1,4 @@
 import NewProducts from "./NewProducts"
 import NewProduct from "./NewProduct"
-export {NewProducts, NewProduct}
+import AllNewProducts from "./AllNewProducts"
+export {NewProducts, NewProduct, AllNewProducts}

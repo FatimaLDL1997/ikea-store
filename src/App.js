@@ -10,7 +10,7 @@ import {
   SharedLayout,
   Main,
 } from "./pages/dashboard";
-import { NewProducts } from "./pages/subProducts";
+import { NewProducts, AllNewProducts } from "./pages/subProducts";
 
 function App() {
   return (
@@ -34,6 +34,8 @@ function App() {
           <Route path="backtoschool" element={<BackToSchool />} />
 
           <Route path="newproducts" element={<NewProducts />} />
+          <Route path="all-new-products" element={<AllNewProducts />} />
+
         </Route>
         <Route path="/register" element={<div>{/* <Register /> */}</div>} />
       </Routes>

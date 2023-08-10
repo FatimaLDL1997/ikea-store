@@ -27,13 +27,13 @@ const Wrapper = styled.section`
   @media (min-width: 1700px) and (max-width: 2400px){
     .dashboard-page{
       margin-left: 7vw;
-      width: 91%;
+      width: 91vw;
     }
   }
   @media (min-width: 2400px){
     .dashboard-page{
       margin-left: 16vw;
-      width: 72%;
+      width: 72vw;
     }
   }
   @media (min-width: 992px) {

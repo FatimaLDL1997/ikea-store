@@ -11,19 +11,25 @@ import "swiper/css/scrollbar";
 
 import products from "../../utils/products";
 import NewProduct from "./NewProduct";
+import {useNavigate} from 'react-router-dom'
 
 SwiperCore.use([Navigation, Pagination, Scrollbar]);
 const NewProducts = () => {
+  const navigate = useNavigate()
   return (
     // eslint-disable-line no-eval
 
     <Wrapper>
-      <h4>What’s new in the IKEA range</h4>
-      <h3>Open your home to colourful new looks</h3>
-      <h2>
-        Want to liven up every room in your home? Style them with the latest new
-        products in oodles of colours that pop.
-      </h2>
+      <h4 className="title-top">What’s new in the IKEA range</h4>
+      <div className="top-section-container">
+        <div className="text-container ">
+          <h3>Get inspired with the latest news</h3>
+          <h2>Brighten your home with vibrant updates in just a few clicks.</h2>
+        </div>
+        <div className="see-all-btn-container">
+          <button className="see-all-btn" onClick={()=>navigate('/all-new-products')}>See all new products</button>
+        </div>
+      </div>
       <div className="product-box">
         <Swiper
           className="swiper-slider-container"
@@ -32,8 +38,7 @@ const NewProducts = () => {
           spaceBetween={50}
           slidesPerView={3}
           centeredSlides={false}
-        
-          // keyboard={true}
+          keyboard={true}
           scrollbar={{ draggable: true }}
         >
           {products.map((product) => {

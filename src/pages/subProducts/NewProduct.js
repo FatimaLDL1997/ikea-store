@@ -14,7 +14,6 @@ const NewProduct = ({
   size,
   price,
 }) => {
-  const [selectedStar, setSelectedStar] = useState();
   return (
     <Wrapper>
       <div key={id} className="product-item-container">
@@ -62,7 +61,7 @@ const NewProduct = ({
               <div>
                 <AiFillStar />
               </div>
-            ) : (
+            ) : ( 
               <div>
                 <AiOutlineStar />
               </div>
