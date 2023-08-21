@@ -41,7 +41,7 @@ const NewProducts = () => {
           keyboard={true}
           scrollbar={{ draggable: true }}
         >
-          {products.map((product) => {
+          {products.slice(0,5).map((product) => {
             return (
               <SwiperSlide key={product.id}>
                 <NewProduct {...product}></NewProduct>
@@ -51,34 +51,6 @@ const NewProducts = () => {
         </Swiper>
       </div>
 
-      {/* <Swiper
-                className='swiper-slider-container'
-                effect={"coverflow"}
-                // modules={[Navigation, Pagination, Scrollbar]}
-                grabCursor={true}
-                spaceBetween={20}
-                slidesPerView={"auto"}
-                watchOverflow={true}
-                centeredSlides={true}
-                coverflowEffect={{
-                  rotate: 10,
-                  stretch: 0,
-                  depth: 5,
-                  modifier: 5,
-                  slideShadows: true,
-                }}
-                // keyboard={true}
-                navigation
-                pagination={{ clickable: true }}
-              >
-                {products.map((product) => {
-                  return (
-                    <SwiperSlide key={product.id}>
-                      <NewProduct {...product} className="item" >{product.text}</NewProduct>
-                    </SwiperSlide>
-                  );
-                })}
-              </Swiper> */}
     </Wrapper>
   );
 };

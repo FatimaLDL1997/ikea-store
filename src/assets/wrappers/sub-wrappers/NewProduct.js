@@ -2,13 +2,14 @@ import styled from "styled-components";
 
 const Wrapper = styled.div`
   .product-item-container {
-    /* background-color: green; */
+    cursor: pointer;
     height: 2rem;
     display: flex;
     flex-direction: column;
     width: 15rem;
     height: 10rem;
     align-items: center;
+
   }
   .product-item {
     /* background-color: yellow; */
@@ -24,6 +25,11 @@ const Wrapper = styled.div`
   .img {
     width: 15rem;
     height: auto;
+  }
+  @media (max-width: 500px) {
+    .img {
+      width: 10rem;
+    }
   }
   .name {
     font-weight: 700;
@@ -76,7 +82,7 @@ const Wrapper = styled.div`
     color: white;
     background-color: #0058a3;
     font-size: 1.5rem;
-    
+
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -95,20 +101,19 @@ const Wrapper = styled.div`
     width: 2.5rem;
     height: 2.5rem;
   }
-  .add-to-fav:hover{
+  .add-to-fav:hover {
     background-color: lightgray;
     cursor: pointer;
-    
   }
   .add-to-cart:hover {
     background-color: #004784;
   }
-  
+
   .add-container {
     display: flex;
     flex-direction: row;
     justify-content: space-between;
     width: 6rem;
   }
-  `;
+`;
 export default Wrapper;

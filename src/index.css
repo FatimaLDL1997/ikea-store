@@ -507,6 +507,44 @@ ul {
 }
 
 
+.name {
+  font-weight: 700;
+  color: #111111;
+  font-size: 14px;
+  line-height: 22px;
+  font-family: "Roboto", sans-serif;
+}
+.type-size h4 {
+  font-weight: 400;
+  color: #484848;
+  font-size: 14px;
+  line-height: 22px;
+  font-family: "Roboto", sans-serif;
+}
+.price {
+  font-weight: 700;
+  color: #111111;
+  font-size: 22px;
+  line-height: 20px;
+  font-family: "Roboto", sans-serif;
+  font-style: normal;
+  display: flex;
+  align-items: flex-end;
+}
+.price span {
+  font-weight: 700;
+  color: #111111;
+  font-size: 14px;
+  line-height: 22px;
+  font-family: "Roboto", sans-serif;
+  font-style: normal;
+}
+.ratings {
+  display: flex;
+  flex-direction: row;
+}
+
+
 
 @media screen and (min-width: 992px) {
   .coffee-info {

@@ -1,8 +1,9 @@
-import React, { useState } from "react";
+import React, { useState} from "react";
 import Wrapper from "../../assets/wrappers/sub-wrappers/NewProduct";
 import { AiFillStar, AiOutlineStar, AiOutlineHeart } from "react-icons/ai";
 import { MdAddShoppingCart } from "react-icons/md";
-import {BsCartPlus} from 'react-icons/bs'
+import {useNavigate} from 'react-router-dom'
+
 const NewProduct = ({
   id,
   text,
@@ -14,9 +15,11 @@ const NewProduct = ({
   size,
   price,
 }) => {
+  const navigate = useNavigate()
+
   return (
     <Wrapper>
-      <div key={id} className="product-item-container">
+      <div key={id} className="product-item-container" onClick={()=>navigate(`/new-product-details/${id}`)}>
         <img src={img} className="img" alt="img" />
         <div className="product-item">
           <div className="name">{text}</div>

@@ -10,9 +10,10 @@ import {
   SharedLayout,
   Main,
 } from "./pages/dashboard";
-import { NewProducts, AllNewProducts } from "./pages/subProducts";
+import { NewProducts, AllNewProducts, NewProdDetail } from "./pages/subProducts";
 
 function App() {
+
   return (
     <BrowserRouter>
       <Routes>
@@ -35,6 +36,7 @@ function App() {
 
           <Route path="newproducts" element={<NewProducts />} />
           <Route path="all-new-products" element={<AllNewProducts />} />
+          <Route path="new-product-details/:productId" element={<NewProdDetail />} />
 
         </Route>
         <Route path="/register" element={<div>{/* <Register /> */}</div>} />

@@ -14,22 +14,18 @@ const Wrapper = styled.div`
     flex-direction: row;
     justify-content: space-between;
   }
-  .filter-container button svg {
+  
+  .filter-container .features-btn:hover,
+  .filter-container .type-btn:hover,
+  .filter-container .category-btn:hover,
+  .filter-container .sort-btn:hover,
+  .filter-container .size-btn:hover,
+  .filter-container .color-btn:hover,
+  .filter-container .price-btn:hover {
+    background-color: lightgray;
     cursor: pointer;
   }
-  .filter-container button svg:hover {
-    color: reds;
-  }
-  .filter-container .features-btn:hover,
-    .filter-container .type-btn:hover,
-    .filter-container .category-btn:hover,
-    .filter-container .sort-btn:hover,
-    .filter-container .size-btn:hover,
-    .filter-container .color-btn:hover,
 
-    .filter-container .price-btn:hover {
-     background-color: lightgray;
-    }
   @media (min-width: 900px) {
     .items-container {
       justify-content: flex-end;
@@ -86,7 +82,10 @@ const Wrapper = styled.div`
   .filter-container {
     display: flex;
     padding-top: 2rem;
+    margin-bottom: 6rem;
     gap: 1rem;
+    padding-bottom: 2rem;
+    border-bottom: 1px solid lightgrey;
     button {
       display: flex;
       justify-content: center;
@@ -111,6 +110,7 @@ const Wrapper = styled.div`
     background-color: white;
     /* border: 8px solid lightgray; */
     box-shadow: 0px 0px 15px 0px lightgray;
+
     border-radius: 20px;
     padding: 2rem;
     overflow-y: auto;
@@ -175,7 +175,7 @@ const Wrapper = styled.div`
     background-color: white;
     cursor: pointer;
   }
-  
+
   .sort-cntr {
     display: flex;
     flex-direction: row;
@@ -215,9 +215,49 @@ const Wrapper = styled.div`
     right: 42px;
     margin-top: 11px;
   }
-  /* .checkmark:active{
-    background-color: green;
-  } */
+  @media (max-width: 1500px) {
+    .product-box {
+      justify-content: center !important;
+      grid-template-columns: repeat(auto-fill, 207px) !important;
+      /* column-gap:19vmax !important; */
+    }
+  }
+  .product-box {
+    grid-gap: 5rem;
+
+    display: grid;
+
+    /* flex-direction: row; */
+    /* flex-wrap: wrap; */
+    gap: 6rem;
+    row-gap: 25rem;
+    justify-content: center;
+    grid-template-columns: 1fr 1fr 1fr 1fr;
+    /* flex: 0 1 auto;  */
+  }
+  h4,
+  h3,
+  h2 {
+    font-family: "Segoe UI", sans-serif;
+    font-style: normal;
+    color: black;
+  }
+  h4 {
+    font-size: 36px;
+    font-weight: 700;
+    line-height: 48px;
+  }
+  h3 {
+    font-size: 24px;
+    font-weight: 700;
+    line-height: 35px;
+  }
+  h2 {
+    font-size: 14px;
+    font-weight: 400;
+    line-height: 22px;
+    color: #484848;
+  }
 `;
 
 export default Wrapper;

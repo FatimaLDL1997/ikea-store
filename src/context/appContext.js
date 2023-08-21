@@ -1,9 +1,10 @@
-import React, { useReducer,useEffect, useContext, useState } from "react";
+import React, { useReducer, useEffect, useContext, useState } from "react";
 
 import { TOGGLE_SIDEBAR } from "./actions";
 
 import reducer from "./reducers";
 import axios from "axios";
+// import products from "../utils/products";
 
 export const initialState = {
   showSidebar: false,
@@ -17,9 +18,9 @@ const AppProvider = ({ children }) => {
   const [clicked, setClicked] = useState(false);
   const [index, setIndex] = useState(0);
 
-    
   const [windowWidth, setWindowWidth] = useState(window.innerWidth);
   const [windowHeight, setWindowHeight] = useState(window.innerHeight);
+
 
   const setWindowDimensions = () => {
     setWindowWidth(window.innerWidth);
@@ -34,9 +35,6 @@ const AppProvider = ({ children }) => {
       window.removeEventListener("resize", setWindowDimensions);
     };
   }, [window.innerWidth]);
-  // const title = document.querySelector('.window-title')
-  // title.innerHTML = link.text
-  // console.log(title.innerHTML)
 
   const [title, setTitle] = useState(
     document.querySelector(".window-title").innerHTML
