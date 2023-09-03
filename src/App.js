@@ -1,5 +1,5 @@
 import { BrowserRouter, Routes, Route } from "react-router-dom";
-import { Register, Error, ProtectedRoute } from "./pages";
+import { Register, SignIn, Error, ProtectedRoute } from "./pages";
 import {
   Deals,
   Products,
@@ -20,11 +20,12 @@ function App() {
         <Route
           path="/"
           element={
-            <ProtectedRoute>
+            // <ProtectedRoute>
               <SharedLayout />
-            </ProtectedRoute>
+            // </ProtectedRoute>
           }
         >
+          
           <Route index element={<Main />} />
           <Route path="main" element={<Main />} />
           <Route path="products" element={<Products />} />
@@ -39,7 +40,9 @@ function App() {
           <Route path="new-product-details/:productId" element={<NewProdDetail />} />
 
         </Route>
-        <Route path="/register" element={<div>{/* <Register /> */}</div>} />
+        <Route path="/login" element={<div>{<SignIn/>}</div>} />
+        <Route path="/register" element={<div>{<Register/>}</div>} />
+
       </Routes>
     </BrowserRouter>
   );

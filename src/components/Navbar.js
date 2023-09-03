@@ -24,6 +24,7 @@ const Navbar = () => {
 
   const {
     toggleSidebar,
+    toggleRightSidebar,
     logoutUser,
     user,
     show,
@@ -103,7 +104,6 @@ const Navbar = () => {
                 name="search"
                 className="form-input"
                 placeholder="Find what you need to Bring Home to Life"
-               
               ></input>
               <span className="camera-icon">
                 <AiOutlineCamera />
@@ -112,17 +112,19 @@ const Navbar = () => {
           )}
 
           <div className="btns-container">
-            <button
-              className="login-btn"
-              style={{ width: windowWidth < 1700 ? "max-content": '11rem' }}
-            >
-              <AiOutlineUser />
-              {windowWidth > 1700 && (
-                <div className="text">
-                  {user ? `Hej ${user}!` : "Hej! Login or signcup"}
-                </div>
-              )}
-            </button>
+         
+              <button
+                className="login-btn"
+                style={{ width: windowWidth < 1700 ? "max-content" : "11rem" }}
+              >
+                <AiOutlineUser onClick={toggleRightSidebar} />
+                {windowWidth > 1700 && (
+                  <div className="text">
+                    {user ? `Hej ${user.firstName}!` : "Hej! Login or signcup"}
+                  </div>
+                )}
+              </button>
+            
             <span className="fav-list">
               <AiOutlineHeart />
             </span>
@@ -142,22 +144,22 @@ const Navbar = () => {
           </div>
         </div>
         {windowWidth < 700 && (
-            <div className="search-container" >
-              <span className="search-icon">
-                <AiOutlineSearch />
-              </span>
-              <input
-                type="text"
-                name="search"
-                className="form-input"
-                placeholder="Find what you need to Bring Home to Life"
-                style={{ width: "88vw" }}
-              ></input>
-              <span className="camera-icon">
-                <AiOutlineCamera />
-              </span>
-            </div>
-          )}
+          <div className="search-container">
+            <span className="search-icon">
+              <AiOutlineSearch />
+            </span>
+            <input
+              type="text"
+              name="search"
+              className="form-input"
+              placeholder="Find what you need to Bring Home to Life"
+              style={{ width: "88vw" }}
+            ></input>
+            <span className="camera-icon">
+              <AiOutlineCamera />
+            </span>
+          </div>
+        )}
 
         {windowWidth > 1700 && (
           <div className="lower-nav-container">
@@ -207,11 +209,7 @@ const Navbar = () => {
             </div>
           </div>
         )}
-{
-  windowWidth>1700 &&
-  <div className="line"></div>
-
-}
+        {windowWidth > 1700 && <div className="line"></div>}
       </main>
     </Wrapper>
   );

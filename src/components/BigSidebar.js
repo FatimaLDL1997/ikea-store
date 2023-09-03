@@ -37,7 +37,7 @@ const BigSidebar = () => {
               <button className="login-btn"  > 
                 <AiOutlineUser />
                 <div className="text">
-                  {user ? `Hej ${user}!` : "Hej! Login or signcup"}
+                  {user ? `Hej ${user.firstName}!` : "Hej! Login or signcup"}
                 </div>
               </button>
             )}

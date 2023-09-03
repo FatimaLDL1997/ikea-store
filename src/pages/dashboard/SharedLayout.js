@@ -1,7 +1,7 @@
 import React from "react";
 import { Outlet } from "react-router-dom";
 import Wrapper from "../../assets/wrappers/SharedLayout";
-import { Navbar, SmallSidebar, BigSidebar, Overlay } from "../../components";
+import { Navbar, SmallSidebar, BigSidebar, Overlay, RightSidebar } from "../../components";
 import { useAppContext } from "../../context/appContext";
 import { useEffect } from "react";
 
@@ -14,6 +14,8 @@ const SharedLayout = () => {
         {/* <SmallSidebar />  */}
         <Overlay />
         <BigSidebar />
+        <RightSidebar />
+
         <div>
           <Navbar />
           <div className="dashboard-page  ">

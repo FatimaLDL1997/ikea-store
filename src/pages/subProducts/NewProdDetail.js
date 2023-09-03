@@ -270,6 +270,10 @@ const NewProdDetail = () => {
                       <button className="add-to-cart-btn"> Add to cart </button>
                     </div>
                     <div className="description">{desc}</div>
+                    <div className="articleNum-container">
+                      <h2>Article Number</h2>
+                      <div className="articleNum"> {articleNum}</div>
+                    </div>
                   </div>
                 </div>
               </div>

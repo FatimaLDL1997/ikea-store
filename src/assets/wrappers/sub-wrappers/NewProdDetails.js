@@ -111,7 +111,7 @@ const Wrapper = styled.div`
   }
   .details-container .add-to-fav-container {
     position: relative;
-    z-index: 99;
+    z-index: 2;
     top: 2rem;
     left: 95%;
   }
