@@ -51,15 +51,19 @@ const NewProdDetail = () => {
     price,
     img,
     options,
+    availability,
+    amount,
+    optionSelected,
   } = product;
-  const { id1, img1, examples } = options[option];
+  const { examples } = options[option];
 
-  const [itemAmount, setItemAmount] = useState(0);
+  const [itemAmount, setItemAmount] = useState(amount);
   const minus = document.getElementsByClassName("minus");
   const minusContainer = document.getElementsByClassName("minus-container");
   const [hover, setHover] = useState(false);
 
-  const { windowWidth, prods, setProds } = useAppContext();
+  const { windowWidth, prods, setProds, cartItems, setCartItems } =
+    useAppContext();
 
   const handleMouseEnter = () => {
     setHover(true);
@@ -69,22 +73,27 @@ const NewProdDetail = () => {
   };
   const increment = () => {
     console.log("up");
-    setItemAmount(itemAmount + 1);
+    setItemAmount((prevAmount) => {
+      let newAmount = parseInt(prevAmount) + 1;
+      return newAmount;
+    });
     minus[0].style.color = "black";
     minus[0].style.cursor = "pointer";
   };
 
   const decrement = () => {
-    console.log(hover);
+    console.log("down");
     minus[0].style.color = "lightgrey";
     minus[0].style.cursor = "auto";
 
-    console.log("down");
     if (itemAmount > 0) {
       minus[0].style.color = "black";
       minus[0].style.cursor = "pointer";
 
-      setItemAmount(itemAmount - 1);
+      setItemAmount((prevAmount) => {
+        let newAmount = parseInt(prevAmount) - 1;
+        return newAmount;
+      });
     }
   };
   const changeOption = (e) => {
@@ -98,8 +107,68 @@ const NewProdDetail = () => {
     buttons[e.currentTarget.id].style.border = "2px solid black";
   };
 
-  console.log(examples[1].id2);
+  // console.log(examples[1].id2);
+  // console.log(price.indexOf("."));
+  const centsIndex = price.indexOf(".") + 1;
+  // console.log(centsIndex);
+  const dollars = price.slice(0, centsIndex - 1);
+  const cents = price.slice(centsIndex - 1, price.length);
+  // console.log(dollars);
+  // console.log(cents);
 
+  const addToCart = (e) => {
+    setCartItems((prevItems) => {
+      let tempItem = [
+        {
+          id: id, //need item
+          text: text,
+          type: type,
+          size: size,
+          amount: "0",
+          price: price,
+          articleNum: articleNum,
+          availability: availability,
+          optionSelected: option,
+          options: options[option], //includes color and img
+          img: options[option].img1,
+          color: options[option].color,
+          amount: itemAmount,
+        },
+      ];
+
+      if (cartItems) {
+        console.log("defined");
+        if (tempItem[0].amount > 0) {
+          let foundIndex = cartItems.findIndex(
+            (el) =>
+              el[0].id == id && el[0].options.color == options[option].color
+            // el[0].options.color
+            // options[option].color
+            // console.log()
+          );
+          console.log(tempItem[0].amount);
+
+          if (foundIndex < 0) {
+            console.log("foundIndex: " + foundIndex);
+            prevItems.push(tempItem);
+            console.log(cartItems);
+            return prevItems;
+          } else {
+            console.log("foundIndex: " + foundIndex);
+            prevItems.splice(foundIndex, 1, tempItem);
+            console.log(cartItems);
+            return prevItems;
+          }
+        } else {
+          console.log(tempItem[0].amount);
+          console.log(cartItems);
+
+          console.log("please select an amount");
+          return prevItems;
+        }
+      }
+    });
+  };
   return (
     <Wrapper>
       <>
@@ -157,9 +226,11 @@ const NewProdDetail = () => {
                 </div>
                 <div className="price" style={{ paddingBottom: "1.5rem" }}>
                   <span>$</span>
-                  {price}
+                  {dollars}
+                  <span style={{ fontSize: ".80rem", paddingBottom: "0.2rem" }}>
+                    {cents}
+                  </span>
                 </div>
-                <h2>Choose color</h2>
                 <div className="ratings">
                   {rating >= 1 ? (
                     <div>
@@ -208,7 +279,7 @@ const NewProdDetail = () => {
                   )}
                   <span className="reviews">({reviews})</span>
                 </div>
-
+                <h2>Choose color</h2>
                 <div className="getit-container">
                   <h2>How to get it</h2>
                   <div className="getit-options">
@@ -253,21 +324,24 @@ const NewProdDetail = () => {
                           }}
                           onMouseEnter={handleMouseEnter}
                           onMouseLeave={handleMouseLeave}
+                          onClick={() => decrement()}
                         >
-                          <AiOutlineMinus
-                            className="minus"
-                            onClick={() => decrement()}
-                          />
+                          <AiOutlineMinus className="minus" />
                         </div>
                         {itemAmount}
-                        <div className="plus-container">
-                          <AiOutlinePlus
-                            className="plus"
-                            onClick={() => increment()}
-                          />
+                        <div
+                          className="plus-container"
+                          onClick={() => increment()}
+                        >
+                          <AiOutlinePlus className="plus" />
                         </div>
                       </button>
-                      <button className="add-to-cart-btn"> Add to cart </button>
+                      <button
+                        className="add-to-cart-btn"
+                        onClick={(e) => addToCart(e)}
+                      >
+                        Add to cart
+                      </button>
                     </div>
                     <div className="description">{desc}</div>
                     <div className="articleNum-container">
@@ -310,9 +384,11 @@ const NewProdDetail = () => {
                 </div>
                 <div className="price" style={{ paddingBottom: "1.5rem" }}>
                   <span>$</span>
-                  {price}
+                  {dollars}
+                  <span style={{ fontSize: ".80rem", paddingBottom: "0.2rem" }}>
+                    {cents}
+                  </span>
                 </div>
-                <h2>Choose color</h2>
                 <div className="ratings">
                   {rating >= 1 ? (
                     <div>
@@ -361,6 +437,7 @@ const NewProdDetail = () => {
                   )}
                   <span className="reviews">({reviews})</span>
                 </div>
+                <h2>Choose color</h2>
                 <div className="options-box">
                   {options.map(({ img1, id1 }) => {
                     return (
