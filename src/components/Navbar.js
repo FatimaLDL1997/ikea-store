@@ -18,8 +18,11 @@ import { HiOutlineShoppingBag } from "react-icons/hi";
 import { MdOutlineLocalOffer } from "react-icons/md";
 import links from "../utils/links";
 import { NavLink } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 
 const Navbar = () => {
+  const navigate = useNavigate();
+
   let newLinks1 = links.slice(0, 6);
 
   const {
@@ -38,6 +41,7 @@ const Navbar = () => {
     setWindowHeight,
     setWindowWidth,
     setWindowDimensions,
+    cartItems
   } = useAppContext();
   const [showLogout, setShowLogout] = useState(false);
 
@@ -112,25 +116,29 @@ const Navbar = () => {
           )}
 
           <div className="btns-container">
-         
-              <button
-                className="login-btn"
-                style={{ width: windowWidth < 1700 ? "max-content" : "11rem" }}
-              >
-                <AiOutlineUser onClick={toggleRightSidebar} />
-                {windowWidth > 1700 && (
-                  <div className="text">
-                    {user ? `Hej ${user.firstName}!` : "Hej! Login or signcup"}
-                  </div>
-                )}
-              </button>
-            
+            <button
+              className="login-btn"
+              style={{ width: windowWidth < 1700 ? "max-content" : "11rem" }}
+            >
+              <AiOutlineUser onClick={toggleRightSidebar} />
+              {windowWidth > 1700 && (
+                <div className="text">
+                  {user ? `Hej ${user.firstName}!` : "Hej! Login or signcup"}
+                </div>
+              )}
+            </button>
+
             <span className="fav-list">
               <AiOutlineHeart />
             </span>
-            <span className="cart">
-              <HiOutlineShoppingBag />
-            </span>
+            <div className="cart-container"  style={{display: "flex", justifyContent:'center', alignItems:'flex-end' }}>
+              <div style={{ position: "absolute", left:'4.8rem', top:'-0.3rem', fontSize:'12px', backgroundColor:'#0058a3', color:'white', width:'1.2rem', height:'1.2rem', borderRadius:'50px', display:'flex', justifyContent:'center', alignItems:'center'}}>{cartItems.length}</div>
+
+              <span className="cart" onClick={() => navigate("/cart")}>
+                <HiOutlineShoppingBag />
+              </span>
+            </div>
+
             {windowWidth < 1700 && (
               <div
                 className="toggle-btn-container"

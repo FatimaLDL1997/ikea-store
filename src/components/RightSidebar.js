@@ -23,9 +23,9 @@ const RightSidebar = () => {
     window.location.reload();
   };
   const Navigate = useNavigate();
-  console.log(showRightSidebar);
+  // console.log(showRightSidebar);
 
-  console.log(user);
+  // console.log(user);
   useEffect(() => {}, [user]);
   return (
     <Wrapper>

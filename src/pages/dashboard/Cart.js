@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import Wrapper from "../../assets/wrappers/Cart";
 import { FiTruck } from "react-icons/fi";
 import { TbBuildingStore } from "react-icons/tb";
@@ -23,26 +23,39 @@ const Cart = () => {
     setHover(false);
   };
 
+  useEffect(() => {
+    console.log("changed");
+    // window.location.reload();
+  }, [cartItems]);
+
   const increment = (e) => {
+    let numAmount = e.currentTarget.parentElement.children[1];
+    // console.log(numAmount)
+    numAmount.innerHTML = parseInt(numAmount.innerHTML) + 1;
+    setItemAmount(parseInt(numAmount.innerHTML));
+    console.log("up");
+
+    minus[0].style.color = "black";
+    minus[0].style.cursor = "pointer";
   };
 
   const decrement = (e) => {
+    console.log("down");
+    minus[0].style.color = "lightgrey";
+    minus[0].style.cursor = "auto";
 
-    
-    // // console.log(hover);
-    // minus[0].style.color = "lightgrey";
-    // minus[0].style.cursor = "auto";
+    let numAmount = e.currentTarget.parentElement.children[1];
+    setItemAmount(parseInt(numAmount.innerHTML));
 
-    // // console.log("down");
-    // if (itemAmount > 0) {
-    //   minus[0].style.color = "black";
-    //   minus[0].style.cursor = "pointer";
+    if (itemAmount > 1) {
+      minus[0].style.color = "black";
+      minus[0].style.cursor = "pointer";
 
-    //   const amount =
-    //     e.currentTarget.parentElement.parentElement.children[1].innerHTML;
-    //   setItemAmount(parseInt(amount) + 1);
-    // }
+      // console.log(numAmount)
+      numAmount.innerHTML = parseInt(numAmount.innerHTML) - 1;
+    }
   };
+
   return (
     <Wrapper>
       <div className="left-side">
@@ -69,38 +82,27 @@ const Cart = () => {
             Collect
           </button>
         </div>
-        <div className="products-container">
-          {products.map(
-            ({
-              product,
-              img,
-              id,
-              text,
-              availability,
-              type,
-              articleNum,
-              size,
-              price,
-              amount,
-            }) => {
+        {cartItems.length > 0 ? (
+          <div className="products-container">
+            {cartItems.map((item,index) => {
               return (
                 <div
-                  key={id}
+                  key={index}
                   className="product-container"
                   style={{ paddingBottom: "4rem" }}
                 >
                   <div className="left">
                     <div className="img-container">
-                      <img className="img" src={img} />
-                      <div className="article-container">{articleNum}</div>
+                      <img className="img" src={item[0].img} />
+                      <div className="article-container">{item[0].articleNum}</div>
                     </div>
                     <div className="details">
-                      <div className="text">{text}</div>
-                      <div className="type">{type}</div>
-                      <div className="size">{size}</div>
+                      <div className="text">{item[0].text}</div>
+                      <div className="type">{item[0].type}</div>
+                      <div className="size">{item[0].size}</div>
                       <div className="availability">
                         <PiDotOutlineFill className="dot" />
-                        {availability}
+                        {item[0].availability}
                       </div>
                       <div className="amount-delete-row">
                         <button className="inc-dec-btn">
@@ -112,18 +114,16 @@ const Cart = () => {
                             }}
                             onMouseEnter={handleMouseEnter}
                             onMouseLeave={handleMouseLeave}
+                            onClick={(e) => decrement(e)}
                           >
-                            <AiOutlineMinus
-                              className="minus"
-                              onClick={(e) => decrement(e)}
-                            />
+                            <AiOutlineMinus className="minus" />
                           </div>
-                          <div className="amount">{itemAmount}</div>
-                          <div className="plus-container">
-                            <AiOutlinePlus
-                              className="plus"
-                              onClick={(e) => increment(e)}
-                            />
+                          <div className="amount">{item[0].amount}</div>
+                          <div
+                            className="plus-container"
+                            onClick={(e) => increment(e)}
+                          >
+                            <AiOutlinePlus className="plus" />
                           </div>
                         </button>
                         <div className="delete">Remove product</div>
@@ -131,13 +131,15 @@ const Cart = () => {
                     </div>
                   </div>
                   <div className="right">
-                    <div className="price">${price}</div>
+                    <div className="price">${item[0].price}</div>
                   </div>
                 </div>
               );
-            }
-          )}
-        </div>
+            })}
+          </div>
+        ) : (
+          <div className="products-container">Empty Cart</div>
+        )}
       </div>
       <div className="right-side">
         <h3>Order summary</h3>

@@ -3,14 +3,12 @@ import axios from "axios";
 import { useState, useEffect } from "react";
 
 // import React from "react";
-import Logo from "../components/Logo";
 import { BiArrowBack } from "react-icons/bi";
 import Wrapper from "../assets/wrappers/SignIn";
 import logo from "../assets/images/ikea-gray-logo.png";
 import { useNavigate } from "react-router-dom";
 import { IoIosInformation } from "react-icons/io";
 import { useAppContext } from "../context/appContext";
-import { Alert } from "../components";
 import loader from "../assets/images/loader.gif";
 const initialState = {
   name: "",

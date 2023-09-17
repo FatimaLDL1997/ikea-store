@@ -16,7 +16,7 @@ const BigSidebar = () => {
     setWindowWidth,
     setWindowDimensions,
   } = useAppContext();
-  console.log(showSidebar);
+  // console.log(showSidebar);
   return (
     <Wrapper>
       <div

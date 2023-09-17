@@ -381,7 +381,7 @@ ul {
   width: 100vw;
   height: 100vh;
   
-  position: fixed;
+  position: fixed !important;
   z-index: 99;
 
   display: none;

@@ -9,9 +9,10 @@ import {
 } from "react-icons/ai";
 import { BsChevronRight } from "react-icons/bs";
 import { BiStore } from "react-icons/bi";
-
+import { BsThreeDots } from "react-icons/bs";
 import { LiaTruckSolid } from "react-icons/lia";
 import { useParams } from "react-router-dom";
+import loadingDot from "../../assets/images/loadingDots5.gif";
 
 import {
   Navigation,
@@ -27,15 +28,20 @@ import "swiper/css";
 import "swiper/css/navigation";
 import "swiper/css/pagination";
 import "swiper/css/scrollbar";
+import AddedToCartSideMenu from '../../pages/AddedToCartSideMenu.js'
+import { useNavigate } from "react-router-dom";
 import { useAppContext } from "../../context/appContext";
 import products from "../../utils/products";
 SwiperCore.use([Navigation, Pagination, Scrollbar, Mousewheel]);
 
 const NewProdDetail = () => {
+  const navigate = useNavigate();
+
   const [swiperRef, setSwiperRef] = useState(null);
 
   const [option, setOption] = useState(0);
   const [clicked, setClicked] = useState(true);
+  const [loading, setLoading] = useState(false);
 
   const { productId } = useParams();
   const product = products.find((product) => product.id == productId);
@@ -62,8 +68,26 @@ const NewProdDetail = () => {
   const minusContainer = document.getElementsByClassName("minus-container");
   const [hover, setHover] = useState(false);
 
-  const { windowWidth, prods, setProds, cartItems, setCartItems } =
-    useAppContext();
+  const {
+    windowWidth,
+    prods,
+    setProds,
+    cartItems,
+    setCartItems,
+    addCartItemsToLocalStorage,
+    showPopUp, 
+    togglePopUp
+  } = useAppContext();
+
+  const delay = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
+
+  async function makeDelay() {
+    setLoading(true);
+    console.log("before");
+    await delay(3000);
+    console.log("after");
+    setLoading(false);
+  }
 
   const handleMouseEnter = () => {
     setHover(true);
@@ -124,7 +148,6 @@ const NewProdDetail = () => {
           text: text,
           type: type,
           size: size,
-          amount: "0",
           price: price,
           articleNum: articleNum,
           availability: availability,
@@ -152,11 +175,17 @@ const NewProdDetail = () => {
             console.log("foundIndex: " + foundIndex);
             prevItems.push(tempItem);
             console.log(cartItems);
+            addCartItemsToLocalStorage({ cartItems });
+
             return prevItems;
           } else {
             console.log("foundIndex: " + foundIndex);
             prevItems.splice(foundIndex, 1, tempItem);
             console.log(cartItems);
+            makeDelay();
+            
+            addCartItemsToLocalStorage({ cartItems });
+            togglePopUp()
             return prevItems;
           }
         } else {
@@ -164,6 +193,7 @@ const NewProdDetail = () => {
           console.log(cartItems);
 
           console.log("please select an amount");
+          addCartItemsToLocalStorage({ cartItems });
           return prevItems;
         }
       }
@@ -172,6 +202,7 @@ const NewProdDetail = () => {
   return (
     <Wrapper>
       <>
+      <AddedToCartSideMenu data={{itemAmount, text}}/>
         {windowWidth < 900 ? (
           <div className="details-container">
             <div className="add-to-fav-container">
@@ -338,9 +369,15 @@ const NewProdDetail = () => {
                       </button>
                       <button
                         className="add-to-cart-btn"
+                        style={{
+                          display: "flex",
+                          flexDirection: "column",
+                          justifyContent: "center",
+                          alignItems: "center",
+                        }}
                         onClick={(e) => addToCart(e)}
                       >
-                        Add to cart
+                        {loading ? <img src={loadingDot} /> : "Add to cart"}
                       </button>
                     </div>
                     <div className="description">{desc}</div>

@@ -18,8 +18,9 @@ import axios from "axios";
 // set as default
 const token = localStorage.getItem("token");
 const user = localStorage.getItem("user");
-// const userLocation = localStorage.getItem("location");
+let items = localStorage.getItem("cartItems");
 
+// const userLocation = localStorage.getItem("location");
 export const initialState = {
   showSidebar: false,
   showRightSidebar: false,
@@ -32,6 +33,9 @@ export const initialState = {
 
   user: user ? JSON.parse(user) : null,
   token: token,
+  // cartItems: items ? JSON.parse(items):[],
+  // cartList: cartList,
+
   // userLocation: userLocation || "",
   // showSidebar: false,
   // isEditing: false,
@@ -67,6 +71,20 @@ const AppProvider = ({ children }) => {
 
   const [windowWidth, setWindowWidth] = useState(window.innerWidth);
   const [windowHeight, setWindowHeight] = useState(window.innerHeight);
+
+
+  const [cartItems, setCartItems] = useState(()=>{
+    //getting local storage value if any 
+    const savedItems = localStorage.getItem('cartItems')
+    return JSON.parse(savedItems) || []
+  })
+
+
+  const [showPopUp, setShowPopUp] = useState(false)
+
+  const togglePopUp =()=>{
+     setShowPopUp(!showPopUp)
+  }
 
   const setWindowDimensions = () => {
     //------------------window width --------------
@@ -109,7 +127,6 @@ const AppProvider = ({ children }) => {
     (error) => {
       // console.log(error.response);
       if (error.response.status === 401) {
-        
         logoutUser();
       }
       return Promise.reject(error);
@@ -125,6 +142,12 @@ const AppProvider = ({ children }) => {
     setTimeout(() => {
       dispatch({ type: CLEAR_ALERT });
     }, 3000);
+  };
+  const addCartItemsToLocalStorage = ({ cartItems }) => {
+    localStorage.setItem("cartItems", JSON.stringify(cartItems));
+  };
+  const removeCartItemsFromLocalStorage = () => {
+    localStorage.removeItem("cartItems");
   };
   const addUserToLocalStorage = ({ user, token }) => {
     localStorage.setItem("user", JSON.stringify(user)); //since user is an object
@@ -168,8 +191,6 @@ const AppProvider = ({ children }) => {
       });
     }
     clearAlert();
-
-
   };
   //--------------sidebar---------------------
   const toggleSidebar = () => {
@@ -182,6 +203,7 @@ const AppProvider = ({ children }) => {
   const logoutUser = () => {
     dispatch({ type: LOGOUT_USER });
     removeUserFromLocalStorage();
+    removeCartItemsFromLocalStorage();
   };
 
   //------------------------------------
@@ -194,7 +216,7 @@ const AppProvider = ({ children }) => {
         toggleRightSidebar,
 
         logoutUser,
-        
+
         show,
         setShow,
         clicked,
@@ -213,6 +235,14 @@ const AppProvider = ({ children }) => {
         setupUser,
 
         displayAlert,
+
+        cartItems,
+        setCartItems,
+        addCartItemsToLocalStorage,
+
+        setShowPopUp, 
+        showPopUp, 
+        togglePopUp
       }}
     >
       {children}

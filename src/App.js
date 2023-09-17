@@ -9,11 +9,16 @@ import {
   BackToSchool,
   SharedLayout,
   Main,
+  Cart,
 } from "./pages/dashboard";
-import { NewProducts, AllNewProducts, NewProdDetail } from "./pages/subProducts";
+import {
+  NewProducts,
+  AllNewProducts,
+  NewProdDetail,
+  AddedToCartSideMenu,
+} from "./pages/subProducts";
 
 function App() {
-
   return (
     <BrowserRouter>
       <Routes>
@@ -21,11 +26,10 @@ function App() {
           path="/"
           element={
             // <ProtectedRoute>
-              <SharedLayout />
+            <SharedLayout />
             // </ProtectedRoute>
           }
         >
-          
           <Route index element={<Main />} />
           <Route path="main" element={<Main />} />
           <Route path="products" element={<Products />} />
@@ -37,12 +41,18 @@ function App() {
 
           <Route path="newproducts" element={<NewProducts />} />
           <Route path="all-new-products" element={<AllNewProducts />} />
-          <Route path="new-product-details/:productId" element={<NewProdDetail />} />
-
+          <Route
+            path="new-product-details/:productId"
+            element={<NewProdDetail />}
+          />
+          <Route path="cart" element={<Cart />} />
+          <Route
+            path="addedToCart"
+            element={<div>{<AddedToCartSideMenu />}</div>}
+          />
         </Route>
-        <Route path="/login" element={<div>{<SignIn/>}</div>} />
-        <Route path="/register" element={<div>{<Register/>}</div>} />
-
+        <Route path="/login" element={<div>{<SignIn />}</div>} />
+        <Route path="/register" element={<div>{<Register />}</div>} />
       </Routes>
     </BrowserRouter>
   );
