@@ -64,6 +64,13 @@ export const initialState = {
 const AppContext = React.createContext();
 
 const AppProvider = ({ children }) => {
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, []);
+
+  const [, updateState] = React.useState();
+  const forceUpdate = React.useCallback(() => updateState({}), []);
+
   const [state, dispatch] = useReducer(reducer, initialState);
   const [show, setShow] = useState(false);
   const [clicked, setClicked] = useState(false);
@@ -72,19 +79,17 @@ const AppProvider = ({ children }) => {
   const [windowWidth, setWindowWidth] = useState(window.innerWidth);
   const [windowHeight, setWindowHeight] = useState(window.innerHeight);
 
+  const [cartItems, setCartItems] = useState(() => {
+    //getting local storage value if any
+    const savedItems = localStorage.getItem("cartItems");
+    return JSON.parse(savedItems) || [];
+  });
 
-  const [cartItems, setCartItems] = useState(()=>{
-    //getting local storage value if any 
-    const savedItems = localStorage.getItem('cartItems')
-    return JSON.parse(savedItems) || []
-  })
+  const [showPopUp, setShowPopUp] = useState(false);
 
-
-  const [showPopUp, setShowPopUp] = useState(false)
-
-  const togglePopUp =()=>{
-     setShowPopUp(!showPopUp)
-  }
+  const togglePopUp = () => {
+    setShowPopUp(!showPopUp);
+  };
 
   const setWindowDimensions = () => {
     //------------------window width --------------
@@ -240,9 +245,10 @@ const AppProvider = ({ children }) => {
         setCartItems,
         addCartItemsToLocalStorage,
 
-        setShowPopUp, 
-        showPopUp, 
-        togglePopUp
+        setShowPopUp,
+        showPopUp,
+        togglePopUp,
+        forceUpdate,
       }}
     >
       {children}
