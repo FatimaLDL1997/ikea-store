@@ -28,7 +28,7 @@ import "swiper/css";
 import "swiper/css/navigation";
 import "swiper/css/pagination";
 import "swiper/css/scrollbar";
-import AddedToCartSideMenu from '../../pages/AddedToCartSideMenu.js'
+import AddedToCartSideMenu from "../../pages/AddedToCartSideMenu.js";
 import { useNavigate } from "react-router-dom";
 import { useAppContext } from "../../context/appContext";
 import products from "../../utils/products";
@@ -75,8 +75,8 @@ const NewProdDetail = () => {
     cartItems,
     setCartItems,
     addCartItemsToLocalStorage,
-    showPopUp, 
-    togglePopUp
+    showPopUp,
+    togglePopUp,
   } = useAppContext();
 
   const delay = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
@@ -110,7 +110,7 @@ const NewProdDetail = () => {
     minus[0].style.color = "lightgrey";
     minus[0].style.cursor = "auto";
 
-    if (itemAmount > 0) {
+    if (itemAmount > 1) {
       minus[0].style.color = "black";
       minus[0].style.cursor = "pointer";
 
@@ -161,39 +161,32 @@ const NewProdDetail = () => {
 
       if (cartItems) {
         console.log("defined");
-        if (tempItem[0].amount > 0) {
-          let foundIndex = cartItems.findIndex(
-            (el) =>
-              el[0].id == id && el[0].options.color == options[option].color
-            // el[0].options.color
-            // options[option].color
-            // console.log()
-          );
-          console.log(tempItem[0].amount);
 
-          if (foundIndex < 0) {
-            console.log("foundIndex: " + foundIndex);
-            prevItems.push(tempItem);
-            console.log(cartItems);
-            addCartItemsToLocalStorage({ cartItems });
+        let foundIndex = cartItems.findIndex(
+          (el) => el[0].id == id && el[0].options.color == options[option].color
+          // el[0].options.color
+          // options[option].color
+          // console.log()
+        );
+        console.log(tempItem[0].amount);
 
-            return prevItems;
-          } else {
-            console.log("foundIndex: " + foundIndex);
-            prevItems.splice(foundIndex, 1, tempItem);
-            console.log(cartItems);
-            makeDelay();
-            
-            addCartItemsToLocalStorage({ cartItems });
-            togglePopUp()
-            return prevItems;
-          }
-        } else {
-          console.log(tempItem[0].amount);
+        if (foundIndex < 0) {
+          console.log("foundIndex: " + foundIndex);
+          prevItems.push(tempItem);
           console.log(cartItems);
+          makeDelay();
 
-          console.log("please select an amount");
           addCartItemsToLocalStorage({ cartItems });
+          togglePopUp();
+          return prevItems;
+        } else {
+          console.log("foundIndex: " + foundIndex);
+          prevItems.splice(foundIndex, 1, tempItem);
+          console.log(cartItems);
+          makeDelay();
+
+          addCartItemsToLocalStorage({ cartItems });
+          togglePopUp();
           return prevItems;
         }
       }
@@ -202,7 +195,7 @@ const NewProdDetail = () => {
   return (
     <Wrapper>
       <>
-      <AddedToCartSideMenu data={{itemAmount, text}}/>
+        <AddedToCartSideMenu data={{ itemAmount, text }} />
         {windowWidth < 900 ? (
           <div className="details-container">
             <div className="add-to-fav-container">
@@ -210,7 +203,6 @@ const NewProdDetail = () => {
             </div>
             <Swiper
               className="swiper-slider-container"
-              direction={"horizontal"}
               grabCursor={true}
               spaceBetween={100}
               slidesPerView={1}
@@ -218,7 +210,8 @@ const NewProdDetail = () => {
               onSwiper={setSwiperRef}
               centeredSlides={false}
               keyboard={{ enabled: true }}
-              mousewheel={{ enabled: false }}
+              direction="horizontal"
+              mousewheel={{forceToAxis:true}}
               scrollbar={{ draggable: true }}
               modules={[Keyboard, Mousewheel, Pagination]}
             >
@@ -351,7 +344,7 @@ const NewProdDetail = () => {
                           className="minus-container"
                           style={{
                             backgroundColor:
-                              itemAmount > 0 && hover ? "lightgrey" : "white",
+                              itemAmount > 1 && hover ? "lightgrey" : "white",
                           }}
                           onMouseEnter={handleMouseEnter}
                           onMouseLeave={handleMouseLeave}
