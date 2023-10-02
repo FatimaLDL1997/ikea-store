@@ -28,7 +28,6 @@ const Navbar = () => {
   const {
     toggleSidebar,
     toggleRightSidebar,
-    logoutUser,
     user,
     show,
     setShow,
@@ -41,9 +40,9 @@ const Navbar = () => {
     setWindowHeight,
     setWindowWidth,
     setWindowDimensions,
-    cartItems
+    cartItems,
+    totalProducts,
   } = useAppContext();
-  const [showLogout, setShowLogout] = useState(false);
 
   function myclickfun(link) {
     console.log(link.submenu.length); //checking for submenu
@@ -131,8 +130,34 @@ const Navbar = () => {
             <span className="fav-list">
               <AiOutlineHeart />
             </span>
-            <div className="cart-container"  style={{display: "flex", justifyContent:'center', alignItems:'flex-end' }}>
-              <div style={{ position: "absolute", left:'4.8rem', top:'-0.3rem', fontSize:'12px', backgroundColor:'#0058a3', color:'white', width:'1.2rem', height:'1.2rem', borderRadius:'50px', display:'flex', justifyContent:'center', alignItems:'center'}}>{cartItems.length}</div>
+            <div
+              className="cart-container"
+              style={{
+                display: "flex",
+                justifyContent: "center",
+                alignItems: "flex-end",
+              }}
+            >
+              {totalProducts > 0 && (
+                <div
+                  style={{
+                    position: "absolute",
+                    left: "4.8rem",
+                    top: "-0.3rem",
+                    fontSize: "12px",
+                    backgroundColor: "#0058a3",
+                    color: "white",
+                    width: "1.2rem",
+                    height: "1.2rem",
+                    borderRadius: "50px",
+                    display: "flex",
+                    justifyContent: "center",
+                    alignItems: "center",
+                  }}
+                >
+                  {totalProducts}
+                </div>
+              )}
 
               <span className="cart" onClick={() => navigate("/cart")}>
                 <HiOutlineShoppingBag />

@@ -29,18 +29,14 @@ import "swiper/css/navigation";
 import "swiper/css/pagination";
 import "swiper/css/scrollbar";
 import AddedToCartSideMenu from "../../pages/AddedToCartSideMenu.js";
-import { useNavigate } from "react-router-dom";
 import { useAppContext } from "../../context/appContext";
 import products from "../../utils/products";
 SwiperCore.use([Navigation, Pagination, Scrollbar, Mousewheel]);
 
 const NewProdDetail = () => {
-  const navigate = useNavigate();
-
   const [swiperRef, setSwiperRef] = useState(null);
 
   const [option, setOption] = useState(0);
-  const [clicked, setClicked] = useState(true);
   const [loading, setLoading] = useState(false);
 
   const { productId } = useParams();
@@ -65,27 +61,29 @@ const NewProdDetail = () => {
 
   const [itemAmount, setItemAmount] = useState(amount);
   const minus = document.getElementsByClassName("minus");
-  const minusContainer = document.getElementsByClassName("minus-container");
   const [hover, setHover] = useState(false);
 
   const {
     windowWidth,
-    prods,
-    setProds,
     cartItems,
     setCartItems,
     addCartItemsToLocalStorage,
-    showPopUp,
     togglePopUp,
+    sendCartItems,
+    updateCartItems,
+    getCartItems,
+    retrievedItems,
+    alertText,
+    showAlert,
   } = useAppContext();
 
   const delay = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
 
   async function makeDelay() {
-    setLoading(true);
-    console.log("before");
+    // setLoading(true);
+    // console.log("before");
     await delay(3000);
-    console.log("after");
+    // console.log("after");
     setLoading(false);
   }
 
@@ -124,23 +122,37 @@ const NewProdDetail = () => {
     console.log(e.currentTarget.id);
     setOption(e.currentTarget.id);
     let buttons = Array.from(document.getElementsByClassName("option"));
-    // console.log(buttons[0].style);
     buttons.forEach((btn) => {
       btn.style.border = "2px solid white";
     });
     buttons[e.currentTarget.id].style.border = "2px solid black";
   };
 
-  // console.log(examples[1].id2);
-  // console.log(price.indexOf("."));
   const centsIndex = price.indexOf(".") + 1;
-  // console.log(centsIndex);
   const dollars = price.slice(0, centsIndex - 1);
   const cents = price.slice(centsIndex - 1, price.length);
-  // console.log(dollars);
-  // console.log(cents);
 
+  useEffect(() => {
+    console.log(cartItems.length);
+    if (cartItems.length > 1) {
+      console.log("changes");
+      getCartItems();
+      console.log(retrievedItems);
+    }
+  }, [cartItems.length]);
+
+  useEffect(() => {
+    console.log(cartItems.length);
+    if (cartItems.length > 1) {
+      console.log("changes");
+      getCartItems();
+      console.log(retrievedItems);
+    }
+  }, []);
+
+  // console.log(retrItems);
   const addToCart = (e) => {
+    //adds first item here
     setCartItems((prevItems) => {
       let tempItem = [
         {
@@ -159,36 +171,40 @@ const NewProdDetail = () => {
         },
       ];
 
-      if (cartItems) {
-        console.log("defined");
+      // check for duplicate items in cartItems
+      let foundIndex = cartItems.findIndex(
+        (el) => el[0].id == id && el[0].options.color == options[option].color
+      );
 
-        let foundIndex = cartItems.findIndex(
-          (el) => el[0].id == id && el[0].options.color == options[option].color
-          // el[0].options.color
-          // options[option].color
-          // console.log()
-        );
-        console.log(tempItem[0].amount);
+      //if no same item found:
+      if (foundIndex < 0) {
+        prevItems.push(tempItem);
+        makeDelay();
+        //if at least 1 item is found
+        if (cartItems.length > 1 ) {
+          //add item to the same cartItems list
+          updateCartItems({ cartItems });
 
-        if (foundIndex < 0) {
-          console.log("foundIndex: " + foundIndex);
-          prevItems.push(tempItem);
-          console.log(cartItems);
-          makeDelay();
-
-          addCartItemsToLocalStorage({ cartItems });
-          togglePopUp();
-          return prevItems;
+          //if no items exist in the array
         } else {
-          console.log("foundIndex: " + foundIndex);
-          prevItems.splice(foundIndex, 1, tempItem);
-          console.log(cartItems);
-          makeDelay();
-
-          addCartItemsToLocalStorage({ cartItems });
-          togglePopUp();
-          return prevItems;
+          //post a brand new list of cartItems
+          sendCartItems();
         }
+        addCartItemsToLocalStorage({ cartItems });
+        togglePopUp();
+        return prevItems;
+
+        // if same item found
+      } else {
+        //modify that particular element in the list
+        prevItems.splice(foundIndex, 1, tempItem);
+        makeDelay();
+
+        updateCartItems({ cartItems });
+        addCartItemsToLocalStorage({ cartItems });
+
+        togglePopUp();
+        return prevItems;
       }
     });
   };
@@ -211,7 +227,7 @@ const NewProdDetail = () => {
               centeredSlides={false}
               keyboard={{ enabled: true }}
               direction="horizontal"
-              mousewheel={{forceToAxis:true}}
+              mousewhel={{ forceToAxis: true }}
               scrollbar={{ draggable: true }}
               modules={[Keyboard, Mousewheel, Pagination]}
             >

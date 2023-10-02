@@ -24,12 +24,12 @@ const NavLinks = ({ toggleSidebar }) => {
   let newLinks3 = links.slice(11, 19);
 
   function myclickfun(link) {
-    console.log(link.submenu.length); //checking for submenu
-    console.log(link.id1);
+    // console.log(link.submenu.length); //checking for submenu
+    // console.log(link.id1);
     const t = document.querySelector(".window-title");
     t.innerHTML = link.text;
     setTitle(title);
-    console.log(t.innerHTML);
+    // console.log(t.innerHTML);
 
     if (link.submenu.length < 1) {
       // if there isn't
@@ -40,7 +40,7 @@ const NavLinks = ({ toggleSidebar }) => {
       setShow(true);
       setClicked(true);
       setIndex(link.id1);
-      console.log(link.id1);
+      // console.log(link.id1);
     }
   }
 

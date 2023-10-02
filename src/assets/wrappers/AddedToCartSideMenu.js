@@ -41,13 +41,14 @@ const Wrapper = styled.aside`
     margin-right: 4.6rem;
   }
   .show-sidebar {
-    margin-right: -2rem;
+    margin-right: 0rem;
   }
   .items {
     display: flex;
     flex-direction: column;
     gap:1rem;
     padding-top: 2rem;
+    
   }
 
   h1 {
@@ -72,7 +73,6 @@ const Wrapper = styled.aside`
     flex-direction: row;
     width: 100%;
     justify-content: flex-end;
-    padding-right: 1rem;
     
   }
 

@@ -7,15 +7,60 @@ import products from "../../utils/products";
 import { PiDotOutlineFill } from "react-icons/pi";
 import { AiOutlinePlus, AiOutlineMinus } from "react-icons/ai";
 import { useAppContext } from "../../context/appContext";
+
 const Cart = () => {
   const [receiveType, setReceiveType] = useState("delivery");
 
   const [hover, setHover] = useState(false);
 
-  const { forceUpdate, cartItems, setCartItems, addCartItemsToLocalStorage } =
-    useAppContext();
+  const {
+    calTotal,
+    calTotalProd,
+    updateCartItems,
+    total,
+    totalProducts,
+    cartItems,
+    setCartItems,
+    addCartItemsToLocalStorage,
+    forceUpdate,
+    getCartItems,
+    retrItems,
+    retrievedItems,
+    emptyCartItems,
+  } = useAppContext();
   const [itemAmount, setItemAmount] = useState(0);
   const minus = document.getElementsByClassName("minus");
+  const [del, setDel] = useState(false);
+
+  useEffect(() => {
+    calTotal();
+    calTotalProd();
+    getCartItems();
+  }, []);
+
+  useEffect(() => {
+    console.log(cartItems);
+    console.log(cartItems.length);
+
+
+    if (del && cartItems.length >0) {
+      console.log("GET");
+      getCartItems();
+
+      console.log("PATCH");
+      updateCartItems({ cartItems });
+      setDel(false)
+    }
+
+    if (del && cartItems.length < 1) {
+      console.log("cart EMPTIED.............");
+      emptyCartItems();
+      setDel(false)
+
+    }
+  }, [cartItems.length]);
+
+  // console.log(totalProducts);
 
   const handleMouseEnter = () => {
     setHover(true);
@@ -30,17 +75,26 @@ const Cart = () => {
     const color =
       e.currentTarget.parentElement.parentElement.children[1].children[1]
         .innerHTML;
-    console.log(item);
+    // console.log(item);
     let foundIndex = cartItems.findIndex(
       (element) => element[0].color == color && element[0].text == item
     );
+
     setCartItems((prevItems) => {
       prevItems.splice(foundIndex, 1);
       addCartItemsToLocalStorage({ cartItems });
+
+      calTotal();
+      calTotalProd();
+
       return prevItems;
     });
-    forceUpdate();
+    setDel(true);
+
+    console.log(cartItems);
+    console.log(retrievedItems);
   };
+
   const increment = (e) => {
     let numAmount = e.currentTarget.parentElement.children[1];
     numAmount.innerHTML = parseInt(numAmount.innerHTML) + 1;
@@ -85,6 +139,7 @@ const Cart = () => {
                 <FiTruck />
                 Delivery
               </button>
+
               <button
                 className="collect-btn"
                 onClick={() => setReceiveType("collect")}
@@ -159,22 +214,22 @@ const Cart = () => {
                 );
               })}
             </div>
-            )}
           </div>
           <div className="right-side">
             <h3>Order summary</h3>
             <div className="total-price">
               <h4>Products price</h4>
-              <h4> $111.00</h4>
+              <h4> $ {total.toFixed(2)}</h4>
             </div>
             <div className="collect-delivery-price">
               <h4>{receiveType == "delivery" ? "Delivery" : "Collect"}</h4>
               <h4>-</h4>
             </div>
+
             <div className="line"></div>
             <div className="subtotal-row">
               <h4>Subtotal</h4>
-              <h2>$99.92</h2>
+              <h2>${total.toFixed(2)}</h2>
             </div>
             <button className="continue-to-checkout">
               Continue to checkout

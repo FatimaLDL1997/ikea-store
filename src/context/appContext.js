@@ -9,6 +9,16 @@ import {
   SETUP_USER_ERROR,
   SETUP_USER_SUCCESS,
   LOGOUT_USER,
+  SEND_CARTITEMS_SUCCESS,
+  SEND_CARTITEMS_BEGIN,
+  SEND_CARTITEMS_ERROR,
+  UPDATE_CARTITEMS_BEGIN,
+  UPDATE_CARTITEMS_SUCCESS,
+  UPDATE_CARTITEMS_ERROR,
+  GET_CARTITEMS_SUCCESS,
+  GET_CARTITEMS_BEGIN,
+  GET_CARTITEMS_ERROR,
+  DELETE_CARTITEMS_BEGIN,
 } from "./actions";
 
 import reducer from "./reducers";
@@ -18,8 +28,7 @@ import axios from "axios";
 // set as default
 const token = localStorage.getItem("token");
 const user = localStorage.getItem("user");
-let items = localStorage.getItem("cartItems");
-
+// let items = localStorage.getItem("cartItems");
 // const userLocation = localStorage.getItem("location");
 export const initialState = {
   showSidebar: false,
@@ -33,6 +42,8 @@ export const initialState = {
 
   user: user ? JSON.parse(user) : null,
   token: token,
+  retrievedItems: [],
+  found: false,
   // cartItems: items ? JSON.parse(items):[],
   // cartList: cartList,
 
@@ -60,7 +71,8 @@ export const initialState = {
   // sort: "latest",
   // sortOptions: ["latest", "oldest", "a-z", "z-a"],
 };
-
+// console.log("origin")
+// console.log(token)
 const AppContext = React.createContext();
 
 const AppProvider = ({ children }) => {
@@ -69,8 +81,14 @@ const AppProvider = ({ children }) => {
   }, []);
 
   const [, updateState] = React.useState();
-  const forceUpdate = React.useCallback(() => updateState({}), []);
+  const forceUpdate = React.useCallback(
+    () => updateState({}),
 
+    []
+  );
+
+  const [total, setTotal] = useState(0);
+  const [totalProducts, setTotalProducts] = useState(0);
   const [state, dispatch] = useReducer(reducer, initialState);
   const [show, setShow] = useState(false);
   const [clicked, setClicked] = useState(false);
@@ -79,6 +97,39 @@ const AppProvider = ({ children }) => {
   const [windowWidth, setWindowWidth] = useState(window.innerWidth);
   const [windowHeight, setWindowHeight] = useState(window.innerHeight);
 
+  //---------------------axios----------------
+  //axios
+  axios.defaults.headers["Authorization"] = `Bearer ${state.token}`;
+  //axios instance setup
+  const authFetch = axios.create({
+    baseURL: "/api/v1",
+  });
+
+  // request
+  authFetch.interceptors.request.use(
+    (config) => {
+      config.headers["Authorization"] = `Bearer ${state.token}`;
+      return config;
+    },
+    (error) => {
+      return Promise.reject(error);
+    }
+  );
+
+  //response
+  authFetch.interceptors.response.use(
+    (response) => {
+      return response;
+    },
+    (error) => {
+      if (error.response.status === 401) {
+        // logoutUser();
+        console.log("logging  ......");
+      }
+      return Promise.reject(error);
+    }
+  );
+
   const [cartItems, setCartItems] = useState(() => {
     //getting local storage value if any
     const savedItems = localStorage.getItem("cartItems");
@@ -86,6 +137,7 @@ const AppProvider = ({ children }) => {
   });
 
   const [showPopUp, setShowPopUp] = useState(false);
+  const [retrItems, setRetrItems] = useState([]);
 
   const togglePopUp = () => {
     setShowPopUp(!showPopUp);
@@ -106,36 +158,6 @@ const AppProvider = ({ children }) => {
 
   const [title, setTitle] = useState(
     document.querySelector(".window-title").innerHTML
-  );
-  //---------------------axios----------------
-  //axios
-  axios.defaults.headers["Authorization"] = `Bearer ${state.token}`;
-  //axios instance setup
-  const authFetch = axios.create({
-    baseURL: "/api/v1",
-  });
-  // request
-
-  authFetch.interceptors.request.use(
-    (config) => {
-      config.headers["Authorization"] = `Bearer ${state.token}`;
-      return config;
-    },
-    (error) => {
-      return Promise.reject(error);
-    }
-  );
-  authFetch.interceptors.response.use(
-    (response) => {
-      return response;
-    },
-    (error) => {
-      // console.log(error.response);
-      if (error.response.status === 401) {
-        logoutUser();
-      }
-      return Promise.reject(error);
-    }
   );
 
   //-------------------alert-----------------------
@@ -174,7 +196,7 @@ const AppProvider = ({ children }) => {
       );
 
       const { user, token } = response.data;
-      console.log(response.data);
+      // console.log(response.data);
       console.log("good");
 
       dispatch({
@@ -213,11 +235,107 @@ const AppProvider = ({ children }) => {
 
   //------------------------------------
 
+  const calTotal = () => {
+    setTotal(0);
+    cartItems.forEach((element) => {
+      setTotal((oldTotal) => {
+        oldTotal =
+          oldTotal +
+          parseFloat(element[0].price) * parseFloat(element[0].amount);
+        // console.log(oldTotal)
+        return oldTotal;
+      });
+    });
+  };
+
+  const calTotalProd = () => {
+    setTotalProducts(0);
+    cartItems.forEach((element) => {
+      setTotalProducts((oldTotal) => {
+        oldTotal = oldTotal + parseFloat(element[0].amount);
+        return oldTotal;
+      });
+    });
+  };
+  //-------------backend functions ---------------
+
+  const sendCartItems = async () => {
+    dispatch({ type: SEND_CARTITEMS_BEGIN });
+    try {
+      await authFetch.post("/prod", {
+        cartItems,
+      });
+
+      dispatch({ type: SEND_CARTITEMS_SUCCESS });
+    } catch (error) {
+      if (error.response.status === 401) return;
+      dispatch({
+        type: SEND_CARTITEMS_ERROR,
+        payload: { msg: error.response.data.msg },
+      });
+    }
+  };
+
+  const updateCartItems = async (currentCartItems) => {
+    dispatch({ type: UPDATE_CARTITEMS_BEGIN });
+    try {
+      // console.log(initialState.user._id);
+      // let currentUserId = initialState.user._id;
+      await authFetch.patch(`/prod`, currentCartItems);
+      // console.log(currentCartItems);
+
+      dispatch({ type: UPDATE_CARTITEMS_SUCCESS, payload: currentCartItems });
+    } catch (error) {
+      if (error.response.status !== 401) {
+        dispatch({
+          type: UPDATE_CARTITEMS_ERROR,
+          payload: { msg: error.response.data.msg },
+        });
+      }
+    }
+    clearAlert();
+  };
+
+  const getCartItems = async () => {
+    console.log("getting");
+    dispatch({ type: GET_CARTITEMS_BEGIN });
+    try {
+      const { data } = await authFetch.get("/prod");
+      console.log(data.retrievedItems);
+
+      if (data.retrievedItems) {
+        console.log("successfully in");
+        const { retrievedItems } = data;
+        const { cartItems } = retrievedItems;
+        dispatch({ type: GET_CARTITEMS_SUCCESS, payload: { cartItems } });
+      }
+      // console.log(cartItems);
+    } catch (error) {
+      // logoutUser()
+      dispatch({
+        type: GET_CARTITEMS_ERROR,
+        payload: { msg: error.response.data.msg },
+      });
+    }
+    clearAlert();
+  };
+  const emptyCartItems = async () => {
+    console.log("starting Delete All");
+    dispatch({ type: DELETE_CARTITEMS_BEGIN });
+    try {
+      console.log('here........')
+      await authFetch.delete("/prod");
+    } catch (error) {
+      console.log("logging out! delete error");
+    }
+  };
+
   return (
     <AppContext.Provider
       value={{
         ...state,
         toggleSidebar,
+        getCartItems,
         toggleRightSidebar,
 
         logoutUser,
@@ -249,6 +367,17 @@ const AppProvider = ({ children }) => {
         showPopUp,
         togglePopUp,
         forceUpdate,
+        total,
+        calTotal,
+        totalProducts,
+        calTotalProd,
+
+        //backend
+        sendCartItems,
+        updateCartItems,
+        retrItems,
+
+        emptyCartItems,
       }}
     >
       {children}

@@ -1,7 +1,7 @@
 import { useAppContext } from "../context/appContext";
 import Wrapper from "../assets/wrappers/AddedToCartSideMenu";
 import { GrFormClose } from "react-icons/gr";
-import { useNavigate } from "react-rout'er-dom";
+import { useNavigate } from "react-router-dom";
 import { useEffect } from "react";
 
 const AddedToCartSideMenu = (props) => {
