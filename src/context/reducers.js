@@ -13,6 +13,17 @@ import {
   UPDATE_USER_ERROR,
   HANDLE_CHANGE,
   CLEAR_VALUES,
+  SEND_CARTITEMS_BEGIN,
+  SEND_CARTITEMS_ERROR,
+  SEND_CARTITEMS_SUCCESS,
+  UPDATE_CARTITEMS_BEGIN,
+  UPDATE_CARTITEMS_SUCCESS,
+  UPDATE_CARTITEMS_ERROR,
+  GET_CARTITEMS_SUCCESS,
+  GET_CARTITEMS_ERROR,
+  GET_CARTITEMS_BEGIN,
+  DELETE_CARTITEMS_BEGIN,
+
   // CREATE_JOB_BEGIN,
   // CREATE_JOB_SUCCESS,
   // CREATE_JOB_ERROR,
@@ -125,10 +136,76 @@ const reducer = (state, action) => {
       alertText: action.payload.msg,
     };
   }
+  if (action.type == SEND_CARTITEMS_BEGIN) {
+    return { ...state, isLoading: true };
+  }
+  if (action.type == SEND_CARTITEMS_SUCCESS) {
+    return {
+      ...state,
+      isLoading: false,
+      showAlert: true,
+      alertType: "success",
+      alertText: "Cart Items Sent!",
+    };
+  }
+  if (action.type === SEND_CARTITEMS_ERROR) {
+    return {
+      ...state,
+      isLoading: false,
+      showAlert: true,
+      alertType: "danger",
+      alertText: action.payload.msg,
+    };
+  }
 
+  if (action.type == UPDATE_CARTITEMS_BEGIN) {
+    return { ...state, isLoading: true };
+  }
+  if (action.type == UPDATE_CARTITEMS_SUCCESS) {
+    return {
+      ...state,
+      isLoading: false,
+      // token: action.payload.token,
+      // user: action.payload.user,
+      showAlert: true,
+      alertType: "success",
+      alertText: "Cart Items Updates!",
+    };
+  }
+  if (action.type === UPDATE_CARTITEMS_ERROR) {
+    return {
+      ...state,
+      isLoading: false,
+      showAlert: true,
+      alertType: "danger",
+      alertText: action.payload.msg,
+    };
+  }
 
-
-
+  if (action.type == GET_CARTITEMS_BEGIN) {
+    return { ...state, isLoading: true, showAlert: false };
+  }
+  if (action.type == GET_CARTITEMS_SUCCESS) {
+    return {
+      ...state,
+      isLoading: false,
+      retrievedItems: action.payload.cartItems,
+      found: true,
+    };
+  }
+  if (action.type == GET_CARTITEMS_ERROR) {
+    return {
+      ...state,
+      isLoading: false,
+      showAlert: true,
+      alertType: "danger",
+      alertText: action.payload.msg,
+      found: false,
+    };
+  }
+  if (action.type == DELETE_CARTITEMS_BEGIN) {
+    return { ...state, isLoading: true };
+  }
 };
 
 export default reducer;
