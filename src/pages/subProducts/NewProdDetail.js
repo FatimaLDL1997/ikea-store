@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import { useParams } from "react-router-dom";
 import Wrapper from "../../assets/wrappers/sub-wrappers/NewProdDetails";
 import {
   AiFillStar,
@@ -11,7 +12,6 @@ import { BsChevronRight } from "react-icons/bs";
 import { BiStore } from "react-icons/bi";
 import { BsThreeDots } from "react-icons/bs";
 import { LiaTruckSolid } from "react-icons/lia";
-import { useParams } from "react-router-dom";
 import loadingDot from "../../assets/images/loadingDots5.gif";
 
 import {
@@ -33,7 +33,7 @@ import { useAppContext } from "../../context/appContext";
 import products from "../../utils/products";
 SwiperCore.use([Navigation, Pagination, Scrollbar, Mousewheel]);
 
-const NewProdDetail = () => {
+const NewProdDetail = ({ fav }) => {
   const [swiperRef, setSwiperRef] = useState(null);
 
   const [option, setOption] = useState(0);
@@ -66,15 +66,20 @@ const NewProdDetail = () => {
   const {
     windowWidth,
     cartItems,
+    favItems,
     setCartItems,
+    setFavItems,
     addCartItemsToLocalStorage,
+    addFavItemsToLocalStorage,
     togglePopUp,
     sendCartItems,
     updateCartItems,
+    sendFavItems, 
+    updateFavItems, 
     getCartItems,
-    retrievedItems,
-    alertText,
-    showAlert,
+    getFavItems, 
+    found,
+    foundFav, 
   } = useAppContext();
 
   const delay = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
@@ -94,7 +99,7 @@ const NewProdDetail = () => {
     setHover(false);
   };
   const increment = () => {
-    console.log("up");
+    // console.log("up");
     setItemAmount((prevAmount) => {
       let newAmount = parseInt(prevAmount) + 1;
       return newAmount;
@@ -104,7 +109,7 @@ const NewProdDetail = () => {
   };
 
   const decrement = () => {
-    console.log("down");
+    // console.log("down");
     minus[0].style.color = "lightgrey";
     minus[0].style.cursor = "auto";
 
@@ -133,26 +138,89 @@ const NewProdDetail = () => {
   const cents = price.slice(centsIndex - 1, price.length);
 
   useEffect(() => {
-    console.log(cartItems.length);
+    // console.log(cartItems.length);
     if (cartItems.length > 1) {
-      console.log("changes");
+      // console.log("changes");
       getCartItems();
-      console.log(retrievedItems);
+      // console.log(retrievedItems);
     }
-  }, [cartItems.length]);
+    if (favItems.length > 1) {
+      // console.log("changes");
+      getFavItems();
+      // console.log(retrievedItems);
+    }
+  }, [cartItems.length, favItems.length]);
 
   useEffect(() => {
-    console.log(cartItems.length);
-    if (cartItems.length > 1) {
-      console.log("changes");
-      getCartItems();
-      console.log(retrievedItems);
-    }
+    getCartItems();
+    getFavItems();
   }, []);
 
-  // console.log(retrItems);
+  const addToFav = () => {
+    console.log("addtofav");
+    setFavItems((prevItems) => {
+      let tempItem = [
+        {
+          id: id, //need item
+          text: text,
+          type: type,
+          size: size,
+          price: price,
+          articleNum: articleNum,
+          availability: availability,
+          optionSelected: option,
+          options: options[option], //includes color and img
+          img: options[option].img1,
+          color: options[option].color,
+          amount: itemAmount,
+        },
+      ];
+      // check for duplicate items in cartItems
+      let foundIndex = favItems.findIndex(
+        (el) => el[0].id == id && el[0].options.color == options[option].color
+      );
+
+      
+      //if no same item found:
+      if (foundIndex < 0 || !foundFav) {
+        prevItems.push(tempItem);
+        makeDelay();
+        //if at least 1 item is found
+        if (favItems.length > 1) {
+          //add item to the same cartItems list
+          updateFavItems({ favItems });
+
+          //if no items exist in the array
+        } else {
+          //post a brand new list of cartItems
+          sendFavItems();
+        }
+        // togglePopUp();
+        return prevItems;
+
+        // if same item found
+      } else {
+        console.log('found fav item')
+        //modify that particular element in the list
+        prevItems.splice(foundIndex, 1, tempItem);
+        makeDelay();
+
+        updateFavItems({ favItems });
+        addFavItemsToLocalStorage({ favItems });
+
+        // togglePopUp();
+        return prevItems;
+      }
+
+
+      // prevItems.push(tempItem);
+
+      // return prevItems;
+    });
+  };
   const addToCart = (e) => {
     //adds first item here
+
     setCartItems((prevItems) => {
       let tempItem = [
         {
@@ -170,18 +238,22 @@ const NewProdDetail = () => {
           amount: itemAmount,
         },
       ];
+      // console.log(cartItems)
 
       // check for duplicate items in cartItems
       let foundIndex = cartItems.findIndex(
         (el) => el[0].id == id && el[0].options.color == options[option].color
       );
 
+      // console.log(cartItems);
+      // console.log(foundIndex);
+
       //if no same item found:
-      if (foundIndex < 0) {
+      if (foundIndex < 0 || !found) {
         prevItems.push(tempItem);
         makeDelay();
         //if at least 1 item is found
-        if (cartItems.length > 1 ) {
+        if (cartItems.length > 1) {
           //add item to the same cartItems list
           updateCartItems({ cartItems });
 
@@ -190,7 +262,6 @@ const NewProdDetail = () => {
           //post a brand new list of cartItems
           sendCartItems();
         }
-        addCartItemsToLocalStorage({ cartItems });
         togglePopUp();
         return prevItems;
 
@@ -214,7 +285,7 @@ const NewProdDetail = () => {
         <AddedToCartSideMenu data={{ itemAmount, text }} />
         {windowWidth < 900 ? (
           <div className="details-container">
-            <div className="add-to-fav-container">
+            <div className="add-to-fav-container" onClick={() => addToFav()}>
               <AiOutlineHeart className="add-to-fav" />
             </div>
             <Swiper
@@ -558,7 +629,8 @@ const NewProdDetail = () => {
                   </div>
                 </div>
               </div>
-              <div className="add-to-fav-container">
+
+              <div className="add-to-fav-container" onClick={() => addToFav()}>
                 <AiOutlineHeart className="add-to-fav" />
               </div>
             </div>

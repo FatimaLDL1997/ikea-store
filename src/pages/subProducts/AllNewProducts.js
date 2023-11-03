@@ -13,9 +13,6 @@ const AllNewProducts = () => {
   const [clicked, setClicked] = useState(false);
   const [activeProd, setActiveProd] = useState(false);
   const [activeRm, setActiveRm] = useState(false);
-  const [width, setWidth] = useState(0);
-  const [height, setHeight] = useState(0);
-  const [selected, setSelected] = useState(false);
 
   const allUpArrows = document.getElementsByClassName("up-arrow");
   const allDownArrows = document.getElementsByClassName("down-arrow");
@@ -390,7 +387,7 @@ const AllNewProducts = () => {
         </div>
         <div className="product-box">
           {products.map((product) => {
-            return <NewProduct key={product.id} {...product}></NewProduct>;
+            return <NewProduct key={product.id} {...product} ></NewProduct>;
           })}
         </div>
       </div>

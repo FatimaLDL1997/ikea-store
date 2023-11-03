@@ -3,12 +3,12 @@ import Wrapper from "../../assets/wrappers/Cart";
 import { FiTruck } from "react-icons/fi";
 import { TbBuildingStore } from "react-icons/tb";
 import { SlOptions } from "react-icons/sl";
-import products from "../../utils/products";
 import { PiDotOutlineFill } from "react-icons/pi";
 import { AiOutlinePlus, AiOutlineMinus } from "react-icons/ai";
 import { useAppContext } from "../../context/appContext";
 
 const Cart = () => {
+
   const [receiveType, setReceiveType] = useState("delivery");
 
   const [hover, setHover] = useState(false);
@@ -18,49 +18,47 @@ const Cart = () => {
     calTotalProd,
     updateCartItems,
     total,
-    totalProducts,
     cartItems,
     setCartItems,
     addCartItemsToLocalStorage,
-    forceUpdate,
     getCartItems,
-    retrItems,
-    retrievedItems,
     emptyCartItems,
+    found,
   } = useAppContext();
+  // let count = 0;
+
   const [itemAmount, setItemAmount] = useState(0);
   const minus = document.getElementsByClassName("minus");
   const [del, setDel] = useState(false);
-
   useEffect(() => {
     calTotal();
     calTotalProd();
     getCartItems();
+
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
+
+
   useEffect(() => {
-    console.log(cartItems);
-    console.log(cartItems.length);
-
-
-    if (del && cartItems.length >0) {
-      console.log("GET");
+    //for clearing cart when all items have been deleted
+    if (del && cartItems.length > 0) {
+      // console.log("GET");
       getCartItems();
 
-      console.log("PATCH");
+      // console.log("PATCH");
       updateCartItems({ cartItems });
-      setDel(false)
+      setDel(false);
     }
 
     if (del && cartItems.length < 1) {
-      console.log("cart EMPTIED.............");
+      // console.log("cart EMPTIED.............");
       emptyCartItems();
-      setDel(false)
-
+      setDel(false);
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [cartItems.length]);
 
-  // console.log(totalProducts);
 
   const handleMouseEnter = () => {
     setHover(true);
@@ -75,9 +73,8 @@ const Cart = () => {
     const color =
       e.currentTarget.parentElement.parentElement.children[1].children[1]
         .innerHTML;
-    // console.log(item);
     let foundIndex = cartItems.findIndex(
-      (element) => element[0].color == color && element[0].text == item
+      (element) => element[0].color === color && element[0].text === item
     );
 
     setCartItems((prevItems) => {
@@ -91,8 +88,6 @@ const Cart = () => {
     });
     setDel(true);
 
-    console.log(cartItems);
-    console.log(retrievedItems);
   };
 
   const increment = (e) => {
@@ -121,7 +116,7 @@ const Cart = () => {
 
   return (
     <Wrapper>
-      {cartItems.length > 0 ? (
+      {cartItems.length > 0 || found ? (
         <>
           <div className="left-side">
             <div className="top-row">
@@ -158,7 +153,7 @@ const Cart = () => {
                   >
                     <div className="left">
                       <div className="img-container">
-                        <img className="img" src={item[0].img} />
+                        <img className="img" alt={item[0].text} src={item[0].img} />
                         <div className="article-container">
                           {item[0].articleNum}
                         </div>
@@ -222,7 +217,7 @@ const Cart = () => {
               <h4> $ {total.toFixed(2)}</h4>
             </div>
             <div className="collect-delivery-price">
-              <h4>{receiveType == "delivery" ? "Delivery" : "Collect"}</h4>
+              <h4>{receiveType === "delivery" ? "Delivery" : "Collect"}</h4>
               <h4>-</h4>
             </div>
 

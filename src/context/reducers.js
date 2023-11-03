@@ -11,18 +11,36 @@ import {
   UPDATE_USER_BEGIN,
   UPDATE_USER_SUCCESS,
   UPDATE_USER_ERROR,
+
   HANDLE_CHANGE,
   CLEAR_VALUES,
+
   SEND_CARTITEMS_BEGIN,
   SEND_CARTITEMS_ERROR,
   SEND_CARTITEMS_SUCCESS,
+
   UPDATE_CARTITEMS_BEGIN,
   UPDATE_CARTITEMS_SUCCESS,
   UPDATE_CARTITEMS_ERROR,
+
   GET_CARTITEMS_SUCCESS,
   GET_CARTITEMS_ERROR,
   GET_CARTITEMS_BEGIN,
+
   DELETE_CARTITEMS_BEGIN,
+
+  SEND_FAVITEMS_SUCCESS, 
+  SEND_FAVITEMS_BEGIN, 
+  SEND_FAVITEMS_ERROR, 
+
+  GET_FAVITEMS_BEGIN, 
+  GET_FAVITEMS_SUCCESS, 
+  GET_FAVITEMS_ERROR, 
+
+  UPDATE_FAVITEMS_BEGIN, 
+  UPDATE_FAVITEMS_SUCCESS, 
+  UPDATE_FAVITEMS_ERROR, 
+  
 
   // CREATE_JOB_BEGIN,
   // CREATE_JOB_SUCCESS,
@@ -162,11 +180,12 @@ const reducer = (state, action) => {
     return { ...state, isLoading: true };
   }
   if (action.type == UPDATE_CARTITEMS_SUCCESS) {
+    // console.log(action.payload)
     return {
       ...state,
       isLoading: false,
-      // token: action.payload.token,
-      // user: action.payload.user,
+      token: action.payload.token,
+      user: action.payload.user,
       showAlert: true,
       alertType: "success",
       alertText: "Cart Items Updates!",
@@ -206,6 +225,78 @@ const reducer = (state, action) => {
   if (action.type == DELETE_CARTITEMS_BEGIN) {
     return { ...state, isLoading: true };
   }
+
+  //-------------fav list -------------------
+  if (action.type == SEND_FAVITEMS_BEGIN) {
+    return { ...state, isLoading: true };
+  }
+  if (action.type == SEND_FAVITEMS_SUCCESS) {
+    return {
+      ...state,
+      isLoading: false,
+      showAlert: true,
+      alertType: "success",
+      alertText: "Cart Items Sent!",
+    };
+  }
+  if (action.type === SEND_FAVITEMS_ERROR) {
+    return {
+      ...state,
+      isLoading: false,
+      showAlert: true,
+      alertType: "danger",
+      alertText: action.payload.msg,
+    };
+  }
+
+
+  if (action.type == GET_FAVITEMS_BEGIN) {
+    return { ...state, isLoading: true, showAlert: false };
+  }
+  if (action.type == GET_FAVITEMS_SUCCESS) {
+    return {
+      ...state,
+      isLoading: false,
+      retrievedItems: action.payload.favItems,
+      found: true,
+    };
+  }
+  if (action.type == GET_FAVITEMS_ERROR) {
+    return {
+      ...state,
+      isLoading: false,
+      showAlert: true,
+      alertType: "danger",
+      alertText: action.payload.msg,
+      found: false,
+    };
+  }
+  if (action.type == UPDATE_FAVITEMS_BEGIN) {
+    return { ...state, isLoading: true };
+  }
+  if (action.type == UPDATE_FAVITEMS_SUCCESS) {
+    // console.log(action.payload)
+    return {
+      ...state,
+      isLoading: false,
+      token: action.payload.token,
+      user: action.payload.user,
+      showAlert: true,
+      alertType: "success",
+      alertText: "Fav Items Updates!",
+    };
+  }
+  if (action.type === UPDATE_FAVITEMS_ERROR) {
+    return {
+      ...state,
+      isLoading: false,
+      showAlert: true,
+      alertType: "danger",
+      alertText: action.payload.msg,
+    };
+  }
+
+  
 };
 
 export default reducer;

@@ -20,8 +20,16 @@ const initialState = {
 const SignIn = () => {
   const navigate = useNavigate();
   const [values, setValues] = useState(initialState);
-  const { user, showAlert, displayAlert, setupUser, windowWidth } =
-    useAppContext();
+  const {
+    getCartItems,
+    getFavItems,
+    calTotalProd,
+    user,
+    showAlert,
+    displayAlert,
+    setupUser,
+    windowWidth,
+  } = useAppContext();
 
   const toggleMember = () => {
     setValues({ ...values, isMember: !values.isMember });
@@ -57,6 +65,9 @@ const SignIn = () => {
 
   useEffect(() => {
     if (user) {
+      getCartItems();
+      getFavItems()
+      calTotalProd();
       //if exists --> go to dashboard
       setTimeout(() => {
         navigate("/");

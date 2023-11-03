@@ -1,12 +1,7 @@
 import Wrapper from "../assets/wrappers/Navbar";
-import { FaHome } from "react-icons/fa";
 import { FiMenu, FiTruck } from "react-icons/fi";
-import { useEffect, useState, useRef } from "react";
-import { FaAlignLeft, FaUserCircle, FaCaretDown } from "react-icons/fa";
 import { useAppContext } from "../context/appContext";
 import Logo from "./Logo";
-import { TOGGLE_SIDEBAR } from "../context/actions";
-import { BsTelephone } from "react-icons/bs";
 import {
   AiOutlineUser,
   AiOutlineCamera,
@@ -15,10 +10,10 @@ import {
 } from "react-icons/ai";
 import { TbBuildingStore } from "react-icons/tb";
 import { HiOutlineShoppingBag } from "react-icons/hi";
-import { MdOutlineLocalOffer } from "react-icons/md";
 import links from "../utils/links";
-import { NavLink } from "react-router-dom";
+import { NavLink, Navigate } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
+import { useEffect } from "react";
 
 const Navbar = () => {
   const navigate = useNavigate();
@@ -29,21 +24,19 @@ const Navbar = () => {
     toggleSidebar,
     toggleRightSidebar,
     user,
-    show,
     setShow,
-    clicked,
     setClicked,
-    index,
     setIndex,
-    windowHeight,
     windowWidth,
-    setWindowHeight,
-    setWindowWidth,
-    setWindowDimensions,
-    cartItems,
     totalProducts,
+    calTotalProd,
+    getCartItems,
+    getFavItems, 
   } = useAppContext();
 
+  useEffect(() => {
+    calTotalProd();
+  });
   function myclickfun(link) {
     console.log(link.submenu.length); //checking for submenu
     // console.log(link.id1)
@@ -61,6 +54,14 @@ const Navbar = () => {
       // if there is one
       // console.log(link.id1);
     }
+  }
+  const handleNavToCart = () => {
+    getCartItems();
+    navigate("/cart");
+  };
+  const handleNavToFav =()=>{
+    getFavItems(); 
+    navigate('/favlist'); 
   }
 
   return (
@@ -128,7 +129,7 @@ const Navbar = () => {
             </button>
 
             <span className="fav-list">
-              <AiOutlineHeart />
+              <AiOutlineHeart onClick={()=>handleNavToFav()} />
             </span>
             <div
               className="cart-container"
@@ -159,7 +160,7 @@ const Navbar = () => {
                 </div>
               )}
 
-              <span className="cart" onClick={() => navigate("/cart")}>
+              <span className="cart" onClick={() => handleNavToCart()}>
                 <HiOutlineShoppingBag />
               </span>
             </div>

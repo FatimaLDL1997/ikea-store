@@ -10,6 +10,7 @@ import {
   SharedLayout,
   Main,
   Cart,
+  FavPage,
 } from "./pages/dashboard";
 import {
   NewProducts,
@@ -46,6 +47,8 @@ function App() {
             element={<NewProdDetail />}
           />
           <Route path="cart" element={<Cart />} />
+          <Route path="favlist" element={<FavPage />} />
+
           <Route
             path="addedToCart"
             element={<div>{<AddedToCartSideMenu />}</div>}

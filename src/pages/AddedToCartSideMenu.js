@@ -2,17 +2,10 @@ import { useAppContext } from "../context/appContext";
 import Wrapper from "../assets/wrappers/AddedToCartSideMenu";
 import { GrFormClose } from "react-icons/gr";
 import { useNavigate } from "react-router-dom";
-import { useEffect } from "react";
 
 const AddedToCartSideMenu = (props) => {
-  const { showPopUp,retrievedItems, togglePopUp, cartItems, getCartItems } = useAppContext();
+  const { showPopUp, togglePopUp } = useAppContext();
   const Navigate = useNavigate();
-
-  // useEffect(() => {
-  //   console.log("changes");
-  //   getCartItems();
-  //   console.log(retrievedItems);
-  // }, []);
 
   return (
     <Wrapper>

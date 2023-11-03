@@ -12,12 +12,25 @@ import {
   SEND_CARTITEMS_SUCCESS,
   SEND_CARTITEMS_BEGIN,
   SEND_CARTITEMS_ERROR,
+  SEND_FAVITEMS_SUCCESS,
+  SEND_FAVITEMS_BEGIN,
+  SEND_FAVITEMS_ERROR,
   UPDATE_CARTITEMS_BEGIN,
   UPDATE_CARTITEMS_SUCCESS,
   UPDATE_CARTITEMS_ERROR,
+
+  UPDATE_FAVITEMS_BEGIN, 
+  UPDATE_FAVITEMS_SUCCESS, 
+  UPDATE_FAVITEMS_ERROR, 
+
   GET_CARTITEMS_SUCCESS,
   GET_CARTITEMS_BEGIN,
   GET_CARTITEMS_ERROR,
+
+  GET_FAVITEMS_BEGIN, 
+  GET_FAVITEMS_SUCCESS, 
+  GET_FAVITEMS_ERROR, 
+
   DELETE_CARTITEMS_BEGIN,
 } from "./actions";
 
@@ -28,8 +41,6 @@ import axios from "axios";
 // set as default
 const token = localStorage.getItem("token");
 const user = localStorage.getItem("user");
-// let items = localStorage.getItem("cartItems");
-// const userLocation = localStorage.getItem("location");
 export const initialState = {
   showSidebar: false,
   showRightSidebar: false,
@@ -43,7 +54,7 @@ export const initialState = {
   user: user ? JSON.parse(user) : null,
   token: token,
   retrievedItems: [],
-  found: false,
+  // found: false,
   // cartItems: items ? JSON.parse(items):[],
   // cartList: cartList,
 
@@ -96,7 +107,14 @@ const AppProvider = ({ children }) => {
 
   const [windowWidth, setWindowWidth] = useState(window.innerWidth);
   const [windowHeight, setWindowHeight] = useState(window.innerHeight);
+  const [found, setFound] = useState(false);
+  const [foundFav, setFoundFav] = useState(false);
 
+  // const [reloadCount, setReloadCount] = useState(()=>{
+  //   const count = localStorage.getItem("reloadCount");
+  //   console.log(count);
+  //   return JSON.parse(count) ||0;
+  // });
   //---------------------axios----------------
   //axios
   axios.defaults.headers["Authorization"] = `Bearer ${state.token}`;
@@ -133,11 +151,18 @@ const AppProvider = ({ children }) => {
   const [cartItems, setCartItems] = useState(() => {
     //getting local storage value if any
     const savedItems = localStorage.getItem("cartItems");
+    // console.log(savedItems);
+    return JSON.parse(savedItems) || [];
+  });
+
+  const [favItems, setFavItems] = useState(() => {
+    //getting local storage value if any
+    const savedItems = localStorage.getItem("favItems");
+    // console.log(savedItems);
     return JSON.parse(savedItems) || [];
   });
 
   const [showPopUp, setShowPopUp] = useState(false);
-  const [retrItems, setRetrItems] = useState([]);
 
   const togglePopUp = () => {
     setShowPopUp(!showPopUp);
@@ -176,6 +201,14 @@ const AppProvider = ({ children }) => {
   const removeCartItemsFromLocalStorage = () => {
     localStorage.removeItem("cartItems");
   };
+
+  const addFavItemsToLocalStorage = ({ favItems }) => {
+    localStorage.setItem("favItems", JSON.stringify(favItems));
+  };
+  const removeFavItemsFromLocalStorage = () => {
+    localStorage.removeItem("favItems");
+  };
+
   const addUserToLocalStorage = ({ user, token }) => {
     localStorage.setItem("user", JSON.stringify(user)); //since user is an object
     localStorage.setItem("token", token);
@@ -231,6 +264,7 @@ const AppProvider = ({ children }) => {
     dispatch({ type: LOGOUT_USER });
     removeUserFromLocalStorage();
     removeCartItemsFromLocalStorage();
+    removeFavItemsFromLocalStorage();
   };
 
   //------------------------------------
@@ -279,39 +313,45 @@ const AppProvider = ({ children }) => {
   const updateCartItems = async (currentCartItems) => {
     dispatch({ type: UPDATE_CARTITEMS_BEGIN });
     try {
-      // console.log(initialState.user._id);
-      // let currentUserId = initialState.user._id;
       await authFetch.patch(`/prod`, currentCartItems);
-      // console.log(currentCartItems);
-
-      dispatch({ type: UPDATE_CARTITEMS_SUCCESS, payload: currentCartItems });
+      dispatch({
+        type: UPDATE_CARTITEMS_SUCCESS,
+        payload: { currentCartItems, token, user },
+      });
     } catch (error) {
-      if (error.response.status !== 401) {
-        dispatch({
-          type: UPDATE_CARTITEMS_ERROR,
-          payload: { msg: error.response.data.msg },
-        });
-      }
+      if (error.response.status === 401) return;
+      dispatch({
+        type: UPDATE_CARTITEMS_ERROR,
+        payload: { msg: error.response.data.msg },
+      });
     }
     clearAlert();
   };
 
   const getCartItems = async () => {
-    console.log("getting");
+    // console.log("getting");
     dispatch({ type: GET_CARTITEMS_BEGIN });
     try {
       const { data } = await authFetch.get("/prod");
-      console.log(data.retrievedItems);
+      // console.log(data.retrievedItems);
 
       if (data.retrievedItems) {
-        console.log("successfully in");
+        // console.log("successfully in");
         const { retrievedItems } = data;
         const { cartItems } = retrievedItems;
+
+        setFound(true);
+        addCartItemsToLocalStorage({ cartItems });
         dispatch({ type: GET_CARTITEMS_SUCCESS, payload: { cartItems } });
       }
-      // console.log(cartItems);
+      //  else {
+      //   setFound(false);
+      //   // console.log("no data retrieved");
+      // }
     } catch (error) {
       // logoutUser()
+      setFound(false);
+
       dispatch({
         type: GET_CARTITEMS_ERROR,
         payload: { msg: error.response.data.msg },
@@ -323,19 +363,87 @@ const AppProvider = ({ children }) => {
     console.log("starting Delete All");
     dispatch({ type: DELETE_CARTITEMS_BEGIN });
     try {
-      console.log('here........')
+      console.log("here........");
       await authFetch.delete("/prod");
     } catch (error) {
       console.log("logging out! delete error");
     }
   };
 
+  //----------------------backend for fav -------------
+
+  const sendFavItems = async () => {
+    dispatch({ type: SEND_FAVITEMS_BEGIN });
+    try {
+      await authFetch.post("/fav", {
+        favItems,
+      });
+
+      dispatch({ type: SEND_FAVITEMS_SUCCESS });
+    } catch (error) {
+      if (error.response.status === 401) return;
+      dispatch({
+        type: SEND_FAVITEMS_ERROR,
+        payload: { msg: error.response.data.msg },
+      });
+    }
+  };
+
+  const getFavItems = async () => {
+    console.log("getting favs");
+    dispatch({ type: GET_FAVITEMS_BEGIN });
+    try {
+      const { data } = await authFetch.get("/fav");
+      console.log(data.retrievedItems);
+
+      if (data.retrievedItems) {
+        console.log("favs gotten");
+        const { retrievedItems } = data;
+        const { favItems } = retrievedItems;
+
+        setFoundFav(true);
+        addFavItemsToLocalStorage({ favItems });
+        dispatch({ type: GET_FAVITEMS_SUCCESS, payload: { favItems } });
+      }
+      //  else {
+      //   setFound(false);
+      //   // console.log("no data retrieved");
+      // }
+    } catch (error) {
+      // logoutUser()
+      setFoundFav(false);
+
+      dispatch({
+        type: GET_CARTITEMS_ERROR,
+        payload: { msg: error.response.data.msg },
+      });
+    }
+    clearAlert();
+  };
+
+  const updateFavItems = async (currentFavItems) => {
+    dispatch({ type: UPDATE_FAVITEMS_BEGIN });
+    try {
+      await authFetch.patch(`/fav`, currentFavItems);
+      dispatch({
+        type: UPDATE_FAVITEMS_SUCCESS,
+        payload: { currentFavItems, token, user },
+      });
+    } catch (error) {
+      if (error.response.status === 401) return;
+      dispatch({
+        type: UPDATE_FAVITEMS_ERROR,
+        payload: { msg: error.response.data.msg },
+      });
+    }
+    clearAlert();
+  };
+  //----------------------------------------------------
   return (
     <AppContext.Provider
       value={{
         ...state,
         toggleSidebar,
-        getCartItems,
         toggleRightSidebar,
 
         logoutUser,
@@ -360,8 +468,13 @@ const AppProvider = ({ children }) => {
         displayAlert,
 
         cartItems,
+        favItems,
+
         setCartItems,
+        setFavItems,
+
         addCartItemsToLocalStorage,
+        addFavItemsToLocalStorage,
 
         setShowPopUp,
         showPopUp,
@@ -374,10 +487,19 @@ const AppProvider = ({ children }) => {
 
         //backend
         sendCartItems,
+        sendFavItems,
+
+        getCartItems,
+        getFavItems, 
+
         updateCartItems,
-        retrItems,
+        updateFavItems, 
 
         emptyCartItems,
+
+        found,
+        foundFav, 
+        
       }}
     >
       {children}
