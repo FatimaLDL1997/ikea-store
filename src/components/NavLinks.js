@@ -5,7 +5,7 @@ import Wrapper from "../assets/wrappers/Navlinks";
 
 import { BiArrowBack } from "react-icons/bi";
 import { useAppContext } from "../context/appContext";
-
+import { BsPatchCheckFill } from "react-icons/bs";
 const NavLinks = ({ toggleSidebar }) => {
   const {
     show,
@@ -16,7 +16,7 @@ const NavLinks = ({ toggleSidebar }) => {
     setTitle,
     index,
     setIndex,
-    windowWidth
+    windowWidth,
   } = useAppContext();
 
   let newLinks1 = links.slice(0, 6);
@@ -47,7 +47,7 @@ const NavLinks = ({ toggleSidebar }) => {
   return (
     <Wrapper>
       {show ? (
-        <div className="submenu-content-container" >
+        <div className="submenu-content-container">
           <div className="back-icon">
             <BiArrowBack
               onClick={() => {
@@ -59,7 +59,7 @@ const NavLinks = ({ toggleSidebar }) => {
 
           <div id="sj" className="submenu-content">
             {/*render title */}
-            {newLinks1.map((link) => {
+            {newLinks1.map((link, index) => {
               const { submenu, id1, text } = link;
 
               return (
@@ -74,6 +74,7 @@ const NavLinks = ({ toggleSidebar }) => {
                     }}
                   >
                     {text}
+                    {/* {text + "s"} */}
                   </div>
                 )
               );
@@ -81,10 +82,10 @@ const NavLinks = ({ toggleSidebar }) => {
 
             {/*render submenu-content list */}
 
-            {newLinks1.map((link) => {
+            {newLinks1.map((link, i0) => {
               const { submenu, text, id1 } = link;
 
-              return submenu.map((sublink) => {
+              return submenu.map((sublink, i) => {
                 const { title, id, path } = sublink;
                 if (id1 == index) {
                   return (
@@ -98,7 +99,10 @@ const NavLinks = ({ toggleSidebar }) => {
                         toggleSidebar();
                       }}
                     >
-                      {title}
+                      {i0 == 0 && i == 0 && title}
+                      {i0 == 0 && i == 0 && <BsPatchCheckFill />}
+                      {(i0 != 0 || i != 0) && title}
+                      {/* {i != 0 && title} */}
                     </NavLink>
                   );
                 }
@@ -111,7 +115,7 @@ const NavLinks = ({ toggleSidebar }) => {
 
         <div className={clicked ? "submenu hidden" : "submenu"}>
           <div className="nav-links-bolder">
-            {newLinks1.map((link) => {
+            {newLinks1.map((link, index) => {
               const { text, path, id1, submenu } = link;
               return (
                 <NavLink
@@ -122,7 +126,9 @@ const NavLinks = ({ toggleSidebar }) => {
                     isActive ? "nav-link active" : "nav-link"
                   }
                 >
-                  {text}
+                  {index == 0 && text}
+                  {index == 0 && <BsPatchCheckFill />}
+                  {index != 0 && text}
                 </NavLink>
               );
             })}
@@ -147,7 +153,7 @@ const NavLinks = ({ toggleSidebar }) => {
             })}
           </div>
           <div className="nav-links-reg">
-            {newLinks3.map((link) => {
+            {newLinks3.map((link, index) => {
               const { text, path, id1 } = link;
 
               return (
