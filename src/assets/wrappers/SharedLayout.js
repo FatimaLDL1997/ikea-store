@@ -35,14 +35,16 @@ const Wrapper = styled.section`
       margin-left: 16vw;
       width: 72vw;
     }
+  
   }
   @media (min-width: 992px) {
     .dashboard {
       grid-template-columns: auto 1fr;
     }
-    /* .dashboard-page {
-      width: 80vw;
-    } */
+    
+    .dashboard{
+      display: inline !important;
+    }
   }
 
   @media (max-width: 1700px) {

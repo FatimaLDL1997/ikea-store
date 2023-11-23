@@ -3,6 +3,7 @@ import Navbar from ".//Navbar"
 import Overlay from "./Overlay";
 import RightSidebar from "./RightSidebar";
 import Alert from "./Alert";
+import PopUp from "./PopUp";
 export {
-    BigSidebar, Alert, Navbar, Overlay, RightSidebar
+    PopUp, BigSidebar, Alert, Navbar, Overlay, RightSidebar
 }

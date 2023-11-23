@@ -1,10 +1,18 @@
 import React from "react";
 import Wrapper from "../../assets/wrappers/Main";
 import girlsShopping from "../../assets/images/twogirls.jpg";
+import { useAppContext } from "../../context/appContext";
+import { PopUp } from "../../components";
+
 const Main = () => {
+  const { user } = useAppContext();
+
   return (
     <Wrapper>
-      <div>
+      <div className="main-content">
+        <div className="popup-container" style={{display:'flex', justifyContent:'center', alignItems:'center'}}>
+          <div className="popup">{user && <PopUp />}</div>
+        </div>
         <h1 className="welcome">Welcome to IKEA Canada</h1>
         <div className="top-container">
           <div className="img-container">

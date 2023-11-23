@@ -11,7 +11,7 @@ import {
 import { TbBuildingStore } from "react-icons/tb";
 import { HiOutlineShoppingBag } from "react-icons/hi";
 import links from "../utils/links";
-import { NavLink, Navigate } from "react-router-dom";
+import { NavLink } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
 import { useEffect } from "react";
 

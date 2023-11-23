@@ -173,6 +173,7 @@ const NewProdDetail = ({ fav }) => {
           img: options[option].img1,
           color: options[option].color,
           amount: itemAmount,
+          
         },
       ];
       // check for duplicate items in cartItems

@@ -28,6 +28,7 @@ import {
   GET_CARTITEMS_BEGIN,
 
   DELETE_CARTITEMS_BEGIN,
+  DELETE_FAVITEMS_BEGIN, 
 
   SEND_FAVITEMS_SUCCESS, 
   SEND_FAVITEMS_BEGIN, 
@@ -295,7 +296,9 @@ const reducer = (state, action) => {
       alertText: action.payload.msg,
     };
   }
-
+  if (action.type == DELETE_FAVITEMS_BEGIN) {
+    return { ...state, isLoading: true };
+  }
   
 };
 

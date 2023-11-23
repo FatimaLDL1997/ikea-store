@@ -32,6 +32,7 @@ import {
   GET_FAVITEMS_ERROR, 
 
   DELETE_CARTITEMS_BEGIN,
+  DELETE_FAVITEMS_BEGIN,
 } from "./actions";
 
 import reducer from "./reducers";
@@ -438,6 +439,18 @@ const AppProvider = ({ children }) => {
     }
     clearAlert();
   };
+
+  const emptyFavItems = async () => {
+    console.log("starting Delete All Favs");
+    dispatch({ type: DELETE_FAVITEMS_BEGIN });
+    try {
+      console.log("here........");
+      await authFetch.delete("/fav");
+    } catch (error) {
+      console.log("logging out! delete error");
+    }
+  };
+
   //----------------------------------------------------
   return (
     <AppContext.Provider
@@ -496,6 +509,7 @@ const AppProvider = ({ children }) => {
         updateFavItems, 
 
         emptyCartItems,
+        emptyFavItems, 
 
         found,
         foundFav, 

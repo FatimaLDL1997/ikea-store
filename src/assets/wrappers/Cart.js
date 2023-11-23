@@ -186,6 +186,12 @@ const Wrapper = styled.div`
     letter-spacing: 1.5px;
     margin-top: 2rem;
   }
+  .continue-to-checkout:hover{
+    cursor: pointer;
+    background-color: #004d8f;
+
+    
+  }
 
   @media (max-width: 600) {
     .inc-dec-btn {

@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import products from "../../utils/products";
 import { useAppContext } from "../../context/appContext";
 import { useNavigate } from "react-router-dom";
@@ -6,7 +6,7 @@ import { useNavigate } from "react-router-dom";
 import Wrapper from "../../assets/wrappers/sub-wrappers/AllNewProducts";
 
 import { AiFillStar, AiOutlineStar, AiOutlineHeart } from "react-icons/ai";
-import { MdAddShoppingCart , MdRemoveCircle} from "react-icons/md";
+import { MdAddShoppingCart, MdRemoveCircle } from "react-icons/md";
 
 const FavPage = () => {
   const {
@@ -15,9 +15,13 @@ const FavPage = () => {
     getFavItems,
     updateFavItems,
     setFavItems,
+    addFavItemsToLocalStorage,
     favItems,
+    emptyFavItems,
   } = useAppContext();
   const navigate = useNavigate();
+
+  const [del, setDel] = useState(false);
 
   useEffect(() => {
     getFavItems();
@@ -40,6 +44,53 @@ const FavPage = () => {
     // });
   }, []);
 
+  useEffect(() => {
+    //for clearing cart when all items have been deleted
+    if (del && favItems.length > 0) {
+      // console.log("GET");
+      getFavItems();
+
+      // console.log("PATCH");
+      updateFavItems({ favItems });
+      setDel(false);
+    }
+
+    if (del && favItems.length < 1) {
+      // console.log("cart EMPTIED.............");
+      emptyFavItems();
+      setDel(false);
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [favItems.length]);
+
+  const handleDelete = (e) => {
+    const item =
+      e.currentTarget.parentElement.parentElement.parentElement.children[0]
+        .innerHTML;
+    const color =
+      e.currentTarget.parentElement.parentElement.parentElement.children[2]
+        .innerHTML;
+
+    // console.log(item);
+    // console.log(color);
+
+    let foundIndex = favItems.findIndex(
+      (element) => element[0].color === color && element[0].text === item
+    );
+    console.log(foundIndex);
+
+    setFavItems((prevItems) => {
+      prevItems.splice(foundIndex, 1);
+      addFavItemsToLocalStorage({ favItems });
+
+      // calTotal();
+      // calTotalProd();
+
+      return prevItems;
+    });
+    setDel(true);
+  };
+
   return (
     <Wrapper>
       <div className="title">Shopping List</div>
@@ -50,7 +101,7 @@ const FavPage = () => {
               <div
                 key={index}
                 className="product-item-container"
-                onClick={() => navigate(`/new-product-details/${item[0].id}`)}
+                // onClick={() => navigate(`/new-product-details/${item[0].id}`)}
               >
                 <img src={item[0].img} className="img" alt="img" />
                 <div className="product-item">
@@ -60,61 +111,14 @@ const FavPage = () => {
                       {item[0].type} {item[0].size}
                     </h4>
                   </div>
+                  <h2 className="color">{item[0].color}</h2>
+
                   <div className="price">
                     <span>$</span>
                     {item[0].price}
                   </div>
-                  <div className="ratings">
-                    {item[0].rating >= 1 ? (
-                      <div>
-                        <AiFillStar />
-                      </div>
-                    ) : (
-                      <div>
-                        <AiOutlineStar />
-                      </div>
-                    )}
-                    {item[0].rating >= 2 ? (
-                      <div>
-                        <AiFillStar />
-                      </div>
-                    ) : (
-                      <div>
-                        <AiOutlineStar />
-                      </div>
-                    )}
-                    {item[0].rating >= 3 ? (
-                      <div>
-                        <AiFillStar />
-                      </div>
-                    ) : (
-                      <div>
-                        <AiOutlineStar />
-                      </div>
-                    )}
-                    {item[0].rating >= 4 ? (
-                      <div>
-                        <AiFillStar />
-                      </div>
-                    ) : (
-                      <div>
-                        <AiOutlineStar />
-                      </div>
-                    )}
-                    {item[0].rating >= 5 ? (
-                      <div>
-                        <AiFillStar />
-                      </div>
-                    ) : (
-                      <div>
-                        <AiOutlineStar />
-                      </div>
-                    )}
-                    <span className="reviews">({item[0].reviews})</span>
-                  </div>
-                  <h2 className="options">
-                    {item[0].options > 1 ? "Available in more options" : ""}
-                  </h2>
+                  <h2></h2>
+
                   <div className="add-container">
                     <div className="add-to-cart">
                       <MdAddShoppingCart />
@@ -123,7 +127,7 @@ const FavPage = () => {
                     <AiOutlineHeart />
                   </div> */}
                     <div className="remove">
-                      <MdRemoveCircle />
+                      <MdRemoveCircle onClick={(e) => handleDelete(e)} />
                     </div>
                   </div>
                 </div>
@@ -132,7 +136,9 @@ const FavPage = () => {
           })}
         </div>
       ) : (
-        <div>No Items Added Yet!</div>
+        <div style={{ display: "flex", justifyContent: "center" }}>
+          No Items Added Yet!
+        </div>
       )}
     </Wrapper>
   );

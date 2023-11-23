@@ -6,8 +6,10 @@ import { SlOptions } from "react-icons/sl";
 import { PiDotOutlineFill } from "react-icons/pi";
 import { AiOutlinePlus, AiOutlineMinus } from "react-icons/ai";
 import { useAppContext } from "../../context/appContext";
+import { useNavigate } from "react-router-dom";
 
 const Cart = () => {
+  const navigate = useNavigate();
 
   const [receiveType, setReceiveType] = useState("delivery");
 
@@ -37,6 +39,7 @@ const Cart = () => {
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
+
 
 
 
@@ -114,6 +117,10 @@ const Cart = () => {
     }
   };
 
+  const handleCheckout = ()=>{
+    console.log('checking out ...')
+    navigate()
+  }
   return (
     <Wrapper>
       {cartItems.length > 0 || found ? (
@@ -226,7 +233,7 @@ const Cart = () => {
               <h4>Subtotal</h4>
               <h2>${total.toFixed(2)}</h2>
             </div>
-            <button className="continue-to-checkout">
+            <button className="continue-to-checkout" onClick={()=>handleCheckout()}>
               Continue to checkout
             </button>
           </div>

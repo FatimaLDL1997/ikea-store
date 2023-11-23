@@ -1,8 +1,9 @@
 import styled from "styled-components";
 
 const Wrapper = styled.div`
-
- 
+  .color::first-letter {
+    text-transform: uppercase;
+  }
   .remove {
     display: flex;
     font-size: 4.5rem;
@@ -108,7 +109,6 @@ const Wrapper = styled.div`
     cursor: pointer;
   }
 
-  
   .add-to-cart:hover {
     background-color: #004784;
   }

@@ -561,6 +561,11 @@ const Wrapper = styled.nav`
       width: 98.7vw;
     }
   }
+  @media (min-width: 2400px) {
+    .lower-nav-container{
+      width: 80vw;
+    }
+  }
   @media (min-width: 2963px) {
   
    .short-nav{
