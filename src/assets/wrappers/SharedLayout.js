@@ -10,7 +10,7 @@ const Wrapper = styled.section`
     width: 79vw;
     margin: 0 auto;
     padding: 2rem 0;
-    height: fit-content;
+    /* height: fit-content; */
     margin-bottom: 100rem;
   }
   @media (max-width: 682px) {

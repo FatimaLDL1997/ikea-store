@@ -140,7 +140,7 @@ const Navbar = () => {
               }}
             >
               {totalProducts > 0 && (
-                <div
+                <div className="totalProductsIcon"
                   style={{
                     position: "absolute",
                     left: "4.8rem",

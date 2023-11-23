@@ -142,7 +142,7 @@ const AppProvider = ({ children }) => {
     },
     (error) => {
       if (error.response.status === 401) {
-        // logoutUser();
+        logoutUser();
         console.log("logging  ......");
       }
       return Promise.reject(error);

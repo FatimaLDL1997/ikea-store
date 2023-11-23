@@ -7,6 +7,7 @@ const Wrapper = styled.nav`
   justify-content: center;
   box-shadow: 0 1px 0px 0px rgba(0, 0, 0, 0.1);
   background: var(--white);
+
   .logo {
     display: flex;
     align-items: center;
@@ -349,10 +350,9 @@ const Wrapper = styled.nav`
     justify-content: flex-end;
     align-content: center;
     width: 50%;
-    
+
     height: 3rem;
     border-bottom: 1px solid #efefef;
-
   }
 
   .mystore svg,
@@ -368,13 +368,12 @@ const Wrapper = styled.nav`
     width: 50%;
     height: 3rem;
     border-bottom: 1px solid #efefef;
-
   }
-  .delivery:hover{
+  .delivery:hover {
     cursor: pointer;
     background-color: #efefef;
   }
-  .mystore:hover{
+  .mystore:hover {
     cursor: pointer;
     background-color: #efefef;
   }
@@ -446,7 +445,7 @@ const Wrapper = styled.nav`
     .logo {
       width: 5rem;
     }
-
+    
     .loc-store-small {
       padding-left: 0rem;
       padding-right: 0rem;
@@ -466,7 +465,7 @@ const Wrapper = styled.nav`
       gap: 0;
     }
   }
-
+  
   @media (min-width: 700px) and (max-width: 800px) {
     .navbar-logo {
       left: 2rem;
@@ -485,8 +484,11 @@ const Wrapper = styled.nav`
     .btns-container {
       gap: 1.5rem;
     }
+    .totalProductsIcon {
+      left: 8rem !important;
+    }
   }
-
+  
   @media (min-width: 0px) and (max-width: 1700px) {
     .line {
       /* display: flex; */
@@ -518,23 +520,23 @@ const Wrapper = styled.nav`
     .logo {
       /* margin-left: 5vw; */
     }
-    .navbar-logo{
+    .navbar-logo {
       margin-left: -2vw;
     }
   }
   @media (min-width: 1700px) {
-    .delivery{
+    .delivery {
       border-bottom: 0px;
       height: 100%;
       width: fit-content;
     }
-    .mystore{
+    .mystore {
       height: 100%;
       border-bottom: 0px;
       width: fit-content;
-
     }
-    .delivery:hover, .mystore:hover{
+    .delivery:hover,
+    .mystore:hover {
       background-color: white;
     }
     .line {
@@ -562,30 +564,29 @@ const Wrapper = styled.nav`
     }
   }
   @media (min-width: 2400px) {
-    .lower-nav-container{
+    .lower-nav-container {
       width: 80vw;
     }
   }
   @media (min-width: 2963px) {
-  
-   .short-nav{
-    margin-left: 3.6vw;
-    margin-right: 4vw;
-   }
-   .lower-nav-container{
-    width: 78%;
-   }
-   .line{
-    width:78%;
-    margin-left: 0vw;
-    margin-top: 1rem;
-   }
+    .short-nav {
+      margin-left: 3.6vw;
+      margin-right: 4vw;
+    }
+    .lower-nav-container {
+      width: 78%;
+    }
+    .line {
+      width: 78%;
+      margin-left: 0vw;
+      margin-top: 1rem;
+    }
   }
   @media (min-width: 4444px) {
-    .short-nav{
-    margin-left: 3.1vw;
-    margin-right: 4vw;
-   }
+    .short-nav {
+      margin-left: 3.1vw;
+      margin-right: 4vw;
+    }
   }
   /*  */
 `;
