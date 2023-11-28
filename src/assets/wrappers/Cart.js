@@ -185,6 +185,7 @@ const Wrapper = styled.div`
     font-weight: 600;
     letter-spacing: 1.5px;
     margin-top: 2rem;
+    margin-bottom: 2rem;
   }
   .continue-to-checkout:hover{
     cursor: pointer;

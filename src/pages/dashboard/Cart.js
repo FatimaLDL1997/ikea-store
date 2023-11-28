@@ -18,6 +18,7 @@ const Cart = () => {
   const {
     calTotal,
     calTotalProd,
+    calTotalFav, 
     updateCartItems,
     total,
     cartItems,
@@ -35,6 +36,7 @@ const Cart = () => {
   useEffect(() => {
     calTotal();
     calTotalProd();
+    calTotalFav(); 
     getCartItems();
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -86,6 +88,7 @@ const Cart = () => {
 
       calTotal();
       calTotalProd();
+      
 
       return prevItems;
     });

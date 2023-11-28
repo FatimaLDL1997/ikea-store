@@ -25,6 +25,7 @@ const SignIn = () => {
     getCartItems,
     getFavItems,
     calTotalProd,
+    calTotalFav, 
     user,
     showAlert,
     displayAlert,
@@ -69,6 +70,7 @@ const SignIn = () => {
       getCartItems();
       getFavItems();
       calTotalProd();
+      calTotalFav(); 
       //if exists --> go to dashboard
       setTimeout(() => {
         navigate("/");

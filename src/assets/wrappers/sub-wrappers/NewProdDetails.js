@@ -4,6 +4,10 @@ const Wrapper = styled.div`
   .add-to-fav {
     font-size: 1.5rem;
   }
+  .exit-notification:hover {
+    cursor: pointer;
+    color: lightblue;
+  }
   .add-to-fav-container {
     display: flex;
     justify-content: center;

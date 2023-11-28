@@ -29,13 +29,16 @@ const Navbar = () => {
     setIndex,
     windowWidth,
     totalProducts,
+    totalFavs,
     calTotalProd,
+    calTotalFav,
     getCartItems,
-    getFavItems, 
+    getFavItems,
   } = useAppContext();
 
   useEffect(() => {
     calTotalProd();
+    calTotalFav();
   });
   function myclickfun(link) {
     console.log(link.submenu.length); //checking for submenu
@@ -59,10 +62,10 @@ const Navbar = () => {
     getCartItems();
     navigate("/cart");
   };
-  const handleNavToFav =()=>{
-    getFavItems(); 
-    navigate('/favlist'); 
-  }
+  const handleNavToFav = () => {
+    getFavItems();
+    navigate("/favlist");
+  };
 
   return (
     <Wrapper>
@@ -128,9 +131,31 @@ const Navbar = () => {
               )}
             </button>
 
+            {totalFavs > 0 && (
+              <div
+                className="totalFavsIcon"
+                style={{
+                  position: "absolute",
+                  left: "2.8rem",
+                  top: "-0.3rem",
+                  fontSize: "12px",
+                  backgroundColor: "#0058a3",
+                  color: "white",
+                  width: "1.2rem",
+                  height: "1.2rem",
+                  borderRadius: "50px",
+                  display: "flex",
+                  justifyContent: "center",
+                  alignItems: "center",
+                }}
+              >
+                {totalFavs}
+              </div>
+            )}
             <span className="fav-list">
-              <AiOutlineHeart onClick={()=>handleNavToFav()} />
+              <AiOutlineHeart onClick={() => handleNavToFav()} />
             </span>
+
             <div
               className="cart-container"
               style={{
@@ -140,7 +165,8 @@ const Navbar = () => {
               }}
             >
               {totalProducts > 0 && (
-                <div className="totalProductsIcon"
+                <div
+                  className="totalProductsIcon"
                   style={{
                     position: "absolute",
                     left: "4.8rem",

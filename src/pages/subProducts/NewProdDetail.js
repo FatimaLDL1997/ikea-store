@@ -10,7 +10,7 @@ import {
 } from "react-icons/ai";
 import { BsChevronRight } from "react-icons/bs";
 import { BiStore } from "react-icons/bi";
-import { BsThreeDots } from "react-icons/bs";
+import { RxCross2 } from "react-icons/rx";
 import { LiaTruckSolid } from "react-icons/lia";
 import loadingDot from "../../assets/images/loadingDots5.gif";
 
@@ -59,10 +59,10 @@ const NewProdDetail = ({ fav }) => {
   } = product;
   const { examples } = options[option];
 
+  const [foundFavItem, setFoundFavItem] = useState(false);
   const [itemAmount, setItemAmount] = useState(amount);
   const minus = document.getElementsByClassName("minus");
   const [hover, setHover] = useState(false);
-
   const {
     windowWidth,
     cartItems,
@@ -74,12 +74,12 @@ const NewProdDetail = ({ fav }) => {
     togglePopUp,
     sendCartItems,
     updateCartItems,
-    sendFavItems, 
-    updateFavItems, 
+    sendFavItems,
+    updateFavItems,
     getCartItems,
-    getFavItems, 
+    getFavItems,
     found,
-    foundFav, 
+    foundFav,
   } = useAppContext();
 
   const delay = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
@@ -90,8 +90,16 @@ const NewProdDetail = ({ fav }) => {
     await delay(3000);
     // console.log("after");
     setLoading(false);
+  
   }
 
+  async function timeNotification (){
+    await delay(5000)
+    setFoundFavItem(false)
+  }
+  const handleExitNotification = () => {
+    setFoundFavItem(false);
+  };
   const handleMouseEnter = () => {
     setHover(true);
   };
@@ -173,7 +181,6 @@ const NewProdDetail = ({ fav }) => {
           img: options[option].img1,
           color: options[option].color,
           amount: itemAmount,
-          
         },
       ];
       // check for duplicate items in cartItems
@@ -181,16 +188,15 @@ const NewProdDetail = ({ fav }) => {
         (el) => el[0].id == id && el[0].options.color == options[option].color
       );
 
-      
       //if no same item found:
       if (foundIndex < 0 || !foundFav) {
+        setFoundFavItem(false);
         prevItems.push(tempItem);
         makeDelay();
         //if at least 1 item is found
         if (favItems.length > 1) {
           //add item to the same cartItems list
           updateFavItems({ favItems });
-
           //if no items exist in the array
         } else {
           //post a brand new list of cartItems
@@ -201,7 +207,9 @@ const NewProdDetail = ({ fav }) => {
 
         // if same item found
       } else {
-        console.log('found fav item')
+        console.log("found fav item");
+        setFoundFavItem(true);
+        timeNotification()
         //modify that particular element in the list
         prevItems.splice(foundIndex, 1, tempItem);
         makeDelay();
@@ -212,7 +220,6 @@ const NewProdDetail = ({ fav }) => {
         // togglePopUp();
         return prevItems;
       }
-
 
       // prevItems.push(tempItem);
 
@@ -286,6 +293,43 @@ const NewProdDetail = ({ fav }) => {
         <AddedToCartSideMenu data={{ itemAmount, text }} />
         {windowWidth < 900 ? (
           <div className="details-container">
+            {foundFavItem && (
+              <div
+                className="notification"
+                style={{
+                  position: "absolute",
+                  background: "#000000c2",
+                  width: "80%",
+                  left: "10%",
+                  display: "flex",
+                  color: "white",
+                }}
+              >
+                <div
+                  className="text-notification"
+                  style={{
+                    width: "100%",
+                    display: "flex",
+                    justifyContent: "center",
+                  }}
+                >
+                  Item already added!
+                </div>
+                <div
+                  className="exit-notification"
+                  style={{
+                    display: "flex",
+                    justifyContent: "center",
+                    width: "10%",
+                    paddingRight:'0.3rem',
+                    alignItems:'center', 
+                  }}
+                  onClick={() => handleExitNotification()}
+                >
+                  <RxCross2/>
+                </div>
+              </div>
+            )}
             <div className="add-to-fav-container" onClick={() => addToFav()}>
               <AiOutlineHeart className="add-to-fav" />
             </div>
@@ -473,6 +517,46 @@ const NewProdDetail = ({ fav }) => {
           </div>
         ) : (
           <div className="container-desktop">
+            {foundFavItem && (
+              <div
+                className="notification"
+                style={{
+                  position: "absolute",
+                  background: "#000000c2",
+                  width: "60%",
+                  left: "20%",
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "center",
+                  color: "white",
+                }}
+              >
+                <div
+                  className="text-notification"
+                  style={{
+                    width: "100%",
+                    display: "flex",
+                    justifyContent: "center",
+                  }}
+                >
+                  Item already added!
+                </div>
+                <div
+                  className="exit-notification"
+                  style={{
+                    display: "flex",
+                    justifyContent: "center",
+                    width: "10%",
+                    paddingRight:'0.3rem',
+                    alignItems:'center', 
+                  }}
+                  onClick={() => handleExitNotification()}
+                >
+                  <RxCross2/>
+                </div>
+              </div>
+            )}
+
             <div className="left-side">
               <div className="images-container">
                 {examples.map(({ id2, img2 }) => {
@@ -625,7 +709,18 @@ const NewProdDetail = ({ fav }) => {
                           />
                         </div>
                       </button>
-                      <button className="add-to-cart-btn"> Add to cart </button>
+                      <button
+                        className="add-to-cart-btn"
+                        style={{
+                          display: "flex",
+                          flexDirection: "column",
+                          justifyContent: "center",
+                          alignItems: "center",
+                        }}
+                        onClick={(e) => addToCart(e)}
+                      >
+                        {loading ? <img src={loadingDot} /> : "Add to cart"}
+                      </button>
                     </div>
                   </div>
                 </div>

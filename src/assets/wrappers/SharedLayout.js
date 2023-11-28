@@ -8,10 +8,11 @@ const Wrapper = styled.section`
   }
   .dashboard-page {
     width: 79vw;
-    margin: 0 auto;
+    margin: 0px auto 10rem !important;
     padding: 2rem 0;
+
     /* height: fit-content; */
-    margin-bottom: 100rem;
+    /* background-color: red; */
   }
   @media (max-width: 682px) {
   .dashboard-page{

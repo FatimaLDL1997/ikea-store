@@ -402,7 +402,14 @@ const Wrapper = styled.nav`
       right: 2rem;
     }
   }
-
+ /* @media (min-width: 2460px) {
+  .totalProductsIcon {
+      left: 14rem !important;
+    }
+    .totalFavsIcon {
+      left: 12rem !important;
+    }
+ } */
   @media (min-width: 1600px) {
     .navbar-logo {
       left: 3rem;
@@ -486,6 +493,9 @@ const Wrapper = styled.nav`
     }
     .totalProductsIcon {
       left: 8rem !important;
+    }
+    .totalFavsIcon {
+      left: 4.5rem !important;
     }
   }
   

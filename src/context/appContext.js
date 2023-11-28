@@ -101,6 +101,9 @@ const AppProvider = ({ children }) => {
 
   const [total, setTotal] = useState(0);
   const [totalProducts, setTotalProducts] = useState(0);
+
+  const [totalFavs, setTotalFavs] = useState(0);
+
   const [state, dispatch] = useReducer(reducer, initialState);
   const [show, setShow] = useState(false);
   const [clicked, setClicked] = useState(false);
@@ -283,6 +286,7 @@ const AppProvider = ({ children }) => {
     });
   };
 
+
   const calTotalProd = () => {
     setTotalProducts(0);
     cartItems.forEach((element) => {
@@ -291,6 +295,18 @@ const AppProvider = ({ children }) => {
         return oldTotal;
       });
     });
+  };
+
+  const calTotalFav = () => {
+    setTotalFavs(0);
+    favItems.forEach((element) => {
+      setTotalFavs((oldTotal) => {
+        oldTotal = oldTotal + parseFloat(element[0].amount);
+        return oldTotal;
+      });
+    });
+   console.log('favs total: ')
+   console.log(totalFavs)
   };
   //-------------backend functions ---------------
 
@@ -496,7 +512,12 @@ const AppProvider = ({ children }) => {
         total,
         calTotal,
         totalProducts,
+        
+        totalFavs, 
+        setTotalFavs, 
+
         calTotalProd,
+        calTotalFav, 
 
         //backend
         sendCartItems,

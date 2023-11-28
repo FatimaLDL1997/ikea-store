@@ -17,6 +17,7 @@ const FavPage = () => {
     setFavItems,
     addFavItemsToLocalStorage,
     favItems,
+    calTotalFav, 
     emptyFavItems,
   } = useAppContext();
   const navigate = useNavigate();
@@ -84,7 +85,8 @@ const FavPage = () => {
       addFavItemsToLocalStorage({ favItems });
 
       // calTotal();
-      // calTotalProd();
+      calTotalFav();
+
 
       return prevItems;
     });
